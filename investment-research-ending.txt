@@ -1,0 +1,37 @@
+Assistant: I'll screen for companies with strong revenue growth momentum.
+
+🔧 Tools used: get_xbrl_frames, get_company_concepts, get_submissions
+
+🚀 High-Growth Companies (>20% Revenue Growth):
+
+Tech Sector:
+• NVIDIA: +126% (AI boom)
+• AMD: +23% (data center growth)
+• ServiceNow: +24% (enterprise software)
+• Palantir: +30% (government contracts)
+
+Healthcare:
+• Eli Lilly: +36% (GLP-1 drugs)
+• Novo Nordisk: +31% (Ozempic/Wegovy)
+• Vertex: +22% (cystic fibrosis)
+
+Consumer:
+• Chipotle: +21% (pricing power)
+• Costco: +23% (membership growth)
+
+💡 Screening criteria: TTM revenue vs prior year, organic growth only
+```
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools" href="/tools/overview">
+    Explore all available MCP tools for investment research
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

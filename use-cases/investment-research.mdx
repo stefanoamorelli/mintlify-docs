@@ -264,128 +264,28 @@ SEC EDGAR MCP provides investment professionals with powerful tools for conducti
 
 ```text
 You: "Find high-growth companies with revenue growth above 20% year-over-year"
-    ```python
-    # Governance analysis from proxy statements
-    governance_sections = await mcp.call_tool(
-        "get_filing_txt_sections",
-        url=proxy_url,
-        sections=["executive_compensation", "board_composition"]
-    )
-    
-    # Look for governance best practices
-    governance_keywords = [
-        "independent", "board", "audit", "compensation",
-        "oversight", "ethics", "compliance"
-    ]
-    ```
-  </Tab>
-</Tabs>
 
-## Investment Thesis Development
+🔧 Tools used: get_xbrl_frames, get_company_concepts, get_submissions
 
-### Sector Analysis
+🚀 High-Growth Companies (>20% Revenue Growth):
 
-```python
-# Compare company within its sector
-sector_companies = {
-    "AAPL": "0000320193",
-    "MSFT": "0000789019",
-    "GOOGL": "0001652044"
-}
+Tech Sector:
+• NVIDIA: +126% (AI boom)
+• AMD: +23% (data center growth)
+• ServiceNow: +24% (enterprise software)
+• Palantir: +30% (government contracts)
 
-# Get sector-wide metrics
-sector_metrics = await mcp.call_tool(
-    "get_xbrl_frames",
-    taxonomy="us-gaap",
-    concept="Revenues",
-    period="2024Q3",
-    unit="USD"
-)
+Healthcare:
+• Eli Lilly: +36% (GLP-1 drugs)
+• Novo Nordisk: +31% (Ozempic/Wegovy)
+• Vertex: +22% (cystic fibrosis)
 
-# Calculate sector averages and rankings
+Consumer:
+• Chipotle: +21% (pricing power)
+• Costco: +23% (membership growth)
+
+💡 Screening criteria: TTM revenue vs prior year, organic growth only
 ```
-
-### Competitive Analysis
-
-```python
-# Compare key competitors
-competitive_metrics = [
-    "Revenues", "NetIncomeLoss", "ResearchAndDevelopmentExpense",
-    "MarketingExpense", "TotalAssets"
-]
-
-for metric in competitive_metrics:
-    comparison_data = await mcp.call_tool(
-        "get_xbrl_frames",
-        taxonomy="us-gaap",
-        concept=metric,
-        period="2024Q3",
-        unit="USD"
-    )
-    
-    # Analyze competitive positioning
-```
-
-## Risk Management
-
-### Diversification Analysis
-
-```python
-# Analyze portfolio sector concentration
-portfolio_sectors = {}
-for ticker in portfolio_companies:
-    company_data = await mcp.call_tool(
-        "get_submissions",
-        cik=ticker_to_cik[ticker]
-    )
-    
-    sic_code = company_data["sic"]
-    portfolio_sectors[ticker] = sic_code
-
-# Check for concentration risk
-```
-
-### Stress Testing
-
-```python
-# Analyze performance during economic downturns
-stress_periods = ["2020Q1", "2020Q2", "2008Q4", "2009Q1"]
-
-for period in stress_periods:
-    stress_performance = await mcp.call_tool(
-        "get_xbrl_frames",
-        taxonomy="us-gaap",
-        concept="NetIncomeLoss",
-        period=period,
-        unit="USD"
-    )
-    
-    # Analyze resilience during stress periods
-```
-
-## Best Practices
-
-<Info>
-  Investment research requires combining quantitative analysis with qualitative insights from SEC filings.
-</Info>
-
-<Steps>
-  <Step title="Multiple Data Points">
-    Use various financial metrics and ratios for comprehensive analysis
-  </Step>
-  
-  <Step title="Time Series Analysis">
-    Look at trends over multiple years, not just single periods
-  </Step>
-  
-  <Step title="Peer Comparison">
-    Always compare companies within the same industry
-  </Step>
-  
-  <Step title="Qualitative Analysis">
-    Read management commentary and risk factors carefully
-  </Step>
-</Steps>
 
 ## Related Tools
 
