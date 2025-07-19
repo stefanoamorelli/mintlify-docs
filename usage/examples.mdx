@@ -1,0 +1,303 @@
+---
+title: 'Usage Examples'
+description: 'Learn SEC EDGAR MCP through practical examples'
+icon: 'code'
+---
+
+Explore practical examples of using SEC EDGAR MCP for financial analysis, document processing, and data extraction.
+
+## Quick Start Examples
+
+<Tabs>
+  <Tab title="Company Overview">
+    ```text
+    You: "Give me a quick overview of Apple as a company"
+    
+    Assistant: I'll get Apple's company overview using their ticker symbol.
+    
+    🔧 Tools used: get_cik_by_ticker, get_company_concepts, get_submissions
+    
+    🏢 Apple Inc. (AAPL) Overview:
+    • CIK: 0000320193
+    • Business: Technology hardware, software and services
+    • Headquarters: Cupertino, California
+    • Industry: Consumer Electronics & Computer Hardware
+    
+    📊 Key Financial Metrics (Latest):
+    • Revenue: $383.3B (TTM)
+    • Net Income: $99.8B (TTM)
+    • Total Assets: $364.2B
+    • Employees: ~150,000
+    
+    📝 Latest 10-K Filing: September 28, 2024
+    ```
+  </Tab>
+  
+  <Tab title="Financial Metrics">
+    ```text
+    You: "Show me Apple's quarterly revenue for the last year and compare it to the previous year"
+    
+    Assistant: I'll extract Apple's quarterly revenue data and year-over-year comparison.
+    
+    🔧 Tools used: get_company_concepts, get_xbrl_frames
+    
+    📈 Apple Quarterly Revenue (Last 4 Quarters):
+    • Q4 2024: $94.9B (+6% YoY)
+    • Q3 2024: $85.8B (+5% YoY)
+    • Q2 2024: $90.8B (-4% YoY)
+    • Q1 2024: $119.6B (+2% YoY)
+    
+    📊 Year-over-Year Net Income Comparison:
+    • 2024: $99.8B (+7.5% vs 2023)
+    • 2023: $92.8B
+    • Growth driver: iPhone 15 cycle and Services expansion
+    
+    📉 Trend: Steady growth with Services becoming larger revenue contributor
+    ```
+  </Tab>
+  
+  <Tab title="Document Analysis">
+    ```text
+    You: "Extract the business description and MD&A from Apple's latest 10-K filing"
+    
+    Assistant: I'll extract key sections from Apple's latest annual report.
+    
+    🔧 Tools used: get_submissions, get_filing_txt_sections, stream_filing_txt_chunks
+    
+    📝 Item 1 - Business Description:
+    • Apple designs, manufactures and markets smartphones, computers, tablets, wearables and accessories
+    • Operates digital content and services platform through App Store, Apple Music, iCloud
+    • Five operating segments: iPhone, Mac, iPad, Wearables/Home/Accessories, Services
+    
+    📈 Item 7 - MD&A Key Points:
+    • Net sales increased 2% driven by growth in Services
+    • iPhone revenue flat at $200.6B due to market maturity
+    • Services revenue grew 14% to $96.2B with 1B+ paid subscriptions
+    • Gross margin improved to 45.6% from product mix shift
+    
+    📊 Document processed in 12 chunks, 48,000 total characters analyzed
+    ```
+  </Tab>
+</Tabs>
+
+## Common Workflows
+
+### 📊 Quarterly Earnings Analysis
+
+Analyze a company's latest quarterly results:
+
+<Steps>
+  <Step title="Get Latest 10-Q Filing">
+    ```text
+    You: "Find Microsoft's latest quarterly report"
+    
+    Assistant: I'll get Microsoft's most recent 10-Q filing.
+    
+    🔧 Tools used: get_cik_by_ticker, get_submissions
+    
+    📝 Latest 10-Q Found:
+    • Filing Date: January 24, 2025
+    • Period: Q2 2025 (ended December 31, 2024)
+    • Form: 10-Q
+    • Size: 156 pages
+    • Status: Available for analysis
+    ```
+  </Step>
+  
+  <Step title="Extract Key Sections">
+    ```text
+    You: "Extract the MD&A and financial statements from this 10-Q"
+    
+    Assistant: I'll extract the key analytical sections from Microsoft's quarterly report.
+    
+    🔧 Tools used: get_filing_txt_sections
+    
+    📊 Sections Extracted:
+    • Item 2 - MD&A: 15,000 characters
+    • Financial Statements: 8,500 characters
+    • Key metrics identified and ready for analysis
+    • Management commentary on performance captured
+    ```
+  </Step>
+  
+  <Step title="Get Segment Revenue">
+    ```text
+    You: "Break down Microsoft's revenue by business segment for recent quarters"
+    
+    Assistant: I'll analyze Microsoft's segment performance from their filings.
+    
+    🔧 Tools used: get_company_concepts, get_filing_txt_sections
+    
+    📈 Q2 2025 Segment Revenue:
+    • Productivity & Business Processes: $28.9B (+12% YoY)
+    • Intelligent Cloud: $25.5B (+31% YoY)
+    • More Personal Computing: $16.9B (+8% YoY)
+    
+    🚀 Growth Leaders:
+    • Azure: +30% (within Intelligent Cloud)
+    • Office 365: +15% (within Productivity)
+    • AI services driving cross-segment growth
+    ```
+  </Step>
+  
+  <Step title="Compare to Previous Period">
+    ```text
+    You: "Compare Microsoft's current quarter performance to the same quarter last year"
+    
+    Assistant: I'll analyze year-over-year performance metrics.
+    
+    🔧 Tools used: get_xbrl_frames, get_company_concepts
+    
+    📉 Q2 2025 vs Q2 2024 Comparison:
+    • Total Revenue: $71.3B vs $62.0B (+15% YoY)
+    • Operating Income: $31.4B vs $27.0B (+16% YoY)
+    • Net Income: $24.1B vs $21.9B (+10% YoY)
+    
+    💡 Key Insights:
+    • AI transformation driving accelerated growth
+    • Cloud adoption continuing at enterprise level
+    • Operating leverage improving across segments
+    ```
+  </Step>
+</Steps>
+
+### 🏢 Multi-Company Industry Analysis
+
+```text
+You: "Compare the major tech giants - Apple, Microsoft, Google, Meta, and Amazon across key financial metrics"
+
+Assistant: I'll analyze and compare the key financial metrics across the major tech companies.
+
+🔧 Tools used: get_cik_by_ticker, get_xbrl_frames, get_company_concepts
+
+📈 Tech Giants Financial Comparison (Latest Data):
+
+**Revenue (TTM):**
+• Amazon: $574.8B - Largest by revenue
+• Apple: $383.3B - Premium pricing power
+• Google: $307.4B - Search + Cloud dominance
+• Microsoft: $245.1B - Enterprise software leader
+• Meta: $134.9B - Social media monetization
+
+**Profitability (Net Income TTM):**
+• Apple: $99.8B (26.0% margin) - Highest absolute profit
+• Microsoft: $88.1B (35.9% margin) - Highest margin
+• Google: $73.8B (24.0% margin) - Search efficiency
+• Meta: $39.1B (29.0% margin) - Ad revenue model
+• Amazon: $30.4B (5.3% margin) - Scale over margin
+
+**Key Insights:**
+• Microsoft leads in profit margins due to software model
+• Apple generates most absolute profit despite lower revenue
+• Amazon prioritizes growth and market share over margins
+• All companies show strong financial health and cash generation
+### 📊 Financial Ratio Analysis
+
+```text
+You: "Calculate key financial ratios for Apple including ROE, ROA, debt-to-equity, and profit margin"
+
+Assistant: I'll calculate Apple's key financial ratios using their latest SEC filing data.
+
+🔧 Tools used: get_company_concepts, get_xbrl_frames
+
+📊 Apple Financial Ratios (Latest Quarter):
+
+**Profitability Ratios:**
+• Return on Equity (ROE): 171.9% - Exceptional shareholder returns
+• Return on Assets (ROA): 33.1% - Highly efficient asset utilization
+• Net Profit Margin: 28.4% - Industry-leading profitability
+• Gross Margin: 46.2% - Strong pricing power
+
+**Leverage Ratios:**
+• Debt-to-Equity: 2.11 - Moderate leverage
+• Current Ratio: 0.95 - Efficient working capital
+• Interest Coverage: 41.2x - Strong debt servicing ability
+
+**Key Insights:**
+• Apple's ROE is exceptionally high due to share buybacks reducing equity base
+• Strong cash generation supports high dividend and buyback program
+• Premium product positioning drives superior margins
+```
+
+### 🌍 ESG Analysis
+
+```text
+You: "Extract ESG-related information from Apple's latest filings including environmental commitments and diversity metrics"
+
+Assistant: I'll extract ESG-related information from Apple's SEC filings.
+
+🔧 Tools used: get_filing_txt_sections, get_submissions
+
+🌱 Environmental Commitments:
+• Carbon neutral for corporate operations since 2020
+• 2030 goal: Carbon neutral entire supply chain
+• 100% renewable energy for all facilities
+• 75% reduction in emissions since 2015
+• 40% recycled materials in products
+• $4.7B green bond issuance
+
+👥 Social & Governance:
+• Global workforce: 35% women (up from 33%)
+• US ethnic diversity: 49% minorities
+• Leadership diversity: 32% women in leadership
+• Pay equity: 100% for equivalent work
+• $100M Racial Equity and Justice Initiative
+
+🏆 Recognition:
+• MSCI ESG Rating: AAA
+• Leading tech sector in sustainability metrics
+• Best workplace for diversity (multiple awards)
+```
+
+## Insider Trading Monitor
+
+```text
+You: "Monitor Apple for any recent insider trading activity and flag large transactions"
+
+🔧 Tools used: get_submissions, get_filing_txt_sections
+
+🔍 Insider Trading Analysis (Last 30 days):
+• Total Form 4 filings: 12
+• Insiders active: 5 executives/directors
+• Total transaction value: $89.2 million
+
+🚩 Large Transactions Flagged:
+• Tim Cook (CEO): Sold 511,000 shares @ $189.50 ($96.8M)
+  - Part of pre-arranged 10b5-1 plan
+  - Filed within 2 business days ✅
+
+• Luca Maestri (CFO): Sold 85,000 shares @ $188.25 ($16.0M)
+  - Scheduled vesting and sale
+  - Proper disclosure ✅
+
+📊 Transaction Summary:
+• All transactions appear to be routine executive stock sales
+• No unusual trading patterns detected
+• All filings submitted within SEC deadlines
+• No insider purchases (typically bullish signal) detected
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="First Query Guide"
+    icon="play"
+    href="/usage/first-query"
+  >
+    Step-by-step first query tutorial
+  </Card>
+  <Card
+    title="Tool Reference"
+    icon="wrench"
+    href="/tools/overview"
+  >
+    Detailed tool documentation
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

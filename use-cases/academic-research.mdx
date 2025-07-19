@@ -1,0 +1,144 @@
+---
+title: 'Academic Research'
+description: 'Using SEC EDGAR MCP for academic research and financial studies'
+icon: 'graduation-cap'
+---
+
+<Warning>
+**Important Disclaimer**: EDGAR® and SEC® are trademarks of the U.S. Securities and Exchange Commission. This open-source project is created by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/) and built by the community is not affiliated with or approved by the U.S. Securities and Exchange Commission.
+</Warning>
+
+SEC EDGAR MCP provides researchers with powerful tools for conducting academic studies, financial research, and empirical analysis using comprehensive SEC filing data.
+
+## Research Applications
+
+<CardGroup cols={2}>
+  <Card title="Financial Studies" icon="chart-line">
+    Analyze financial performance and market behavior
+  </Card>
+  <Card title="Corporate Governance" icon="building">
+    Study board composition and governance practices
+  </Card>
+  <Card title="Market Research" icon="magnifying-glass-chart">
+    Investigate market trends and anomalies
+  </Card>
+  <Card title="ESG Research" icon="leaf">
+    Analyze environmental, social, and governance factors
+  </Card>
+</CardGroup>
+
+## Research Methodologies
+
+### Large-Scale Data Collection
+
+```text
+You: "Collect financial and governance data for all S&P 500 companies for my academic study"
+
+Assistant: I'll help you collect comprehensive data for S&P 500 companies for your research.
+
+🔧 Tools used: get_cik_by_ticker, get_company_concepts, get_submissions, get_filing_txt_sections
+
+📊 Data Collection Progress:
+• Processing 500 companies across 11 sectors
+• Financial metrics: Revenue, Net Income, Assets, R&D Spend
+• Governance data: Board composition, executive compensation
+• Time period: 2019-2024 (5-year dataset)
+
+💾 Results:
+• Successfully collected data for 497 companies
+• 3 companies excluded due to recent IPOs
+• Dataset includes 150+ financial metrics per company
+• Governance data extracted from 2,485 proxy statements
+```
+
+### Cross-Sectional Analysis
+
+```text
+You: "Compare revenue growth across different industries for 2024"
+
+Assistant: I'll analyze revenue growth patterns across industries using XBRL data.
+
+🔧 Tools used: get_xbrl_frames, get_company_concepts
+
+📊 Industry Revenue Growth (2024 vs 2023):
+• Technology (SIC 7370-7379): +18.3% avg
+• Healthcare (SIC 8000-8099): +12.7% avg
+• Financial Services (SIC 6000-6799): +8.4% avg
+• Retail (SIC 5200-5999): +5.2% avg
+• Manufacturing (SIC 3000-3999): +3.8% avg
+
+🔍 Key Findings:
+• Tech sector leads growth driven by AI investments
+• Healthcare shows consistent double-digit growth
+• Traditional retail lagging behind e-commerce
+• 82% of companies showed positive YoY growth
+```
+
+## Data Analysis Examples
+
+### Event Study Analysis
+
+```text
+You: "Extract earnings announcement dates for my event study on market reactions"
+
+Assistant: I'll gather earnings announcement dates for your event study analysis.
+
+🔧 Tools used: get_submissions, get_filing_txt_sections
+
+📅 Earnings Event Data Collected:
+• Companies analyzed: 100 (from your study sample)
+• Time period: Q1 2023 - Q4 2024 (8 quarters)
+• Total earnings events: 800 announcements
+• Filing types: 10-Q (quarterly) and 10-K (annual)
+
+📊 Event Window Data:
+• Pre-announcement period: t-5 to t-1
+• Announcement date: t=0 (filing date)
+• Post-announcement: t+1 to t+5
+• Average filing time: 4:02 PM ET (after market close)
+
+💡 Ready for abnormal return calculations
+```
+
+### Textual Analysis
+
+```text
+You: "Analyze sentiment and tone in MD&A sections for my research on disclosure quality"
+
+Assistant: I'll analyze the Management Discussion & Analysis sections for sentiment patterns.
+
+🔧 Tools used: get_filing_txt_sections, stream_filing_txt_chunks
+
+📝 Textual Analysis Results:
+• Documents analyzed: 500 MD&A sections
+• Average word count: 12,847 words
+• Sentiment distribution:
+  - Positive tone: 42%
+  - Neutral tone: 35%
+  - Cautious/Negative: 23%
+
+🔍 Key Linguistic Patterns:
+• Forward-looking statements: 2.3% of text
+• Uncertainty words: 156 avg per document
+• Positive keywords: "growth", "improvement", "strong"
+• Negative keywords: "challenges", "risks", "decline"
+
+💡 Correlation with performance: Companies with positive MD&A tone showed 3.2% higher returns
+```
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card title="XBRL Frames" href="/tools/xbrl/get-xbrl-frames">
+    Cross-company data for empirical studies
+  </Card>
+  <Card title="Company Facts" href="/tools/company/get-company-facts-summary">
+    Comprehensive financial data for research
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

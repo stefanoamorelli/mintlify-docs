@@ -1,0 +1,392 @@
+---
+title: 'Configuration'
+description: 'Configure SEC EDGAR MCP for optimal performance'
+icon: 'gear'
+---
+
+Learn how to configure SEC EDGAR MCP for your specific needs, including environment variables, client settings, and advanced options.
+
+## Environment Variables
+
+### Required Configuration
+
+<ParamField path="SEC_EDGAR_USER_AGENT" type="string" required>
+  Your identification string for SEC EDGAR API access. Must include your name and email.
+  
+  **Format**: `"Your Name (your.email@domain.com)"`
+  
+  **Example**: `"John Doe (john.doe@example.com)"`
+  
+  <Warning>
+    The SEC requires this for API access. Requests without a valid user agent may be blocked.
+  </Warning>
+</ParamField>
+
+### Optional Configuration
+
+<ParamField path="PYTHONPATH" type="string">
+  Path to the SEC EDGAR MCP directory (only needed for local development).
+  
+  **Example**: `/home/user/sec-edgar-mcp:$PYTHONPATH`
+</ParamField>
+
+<ParamField path="LOG_LEVEL" type="string" default="INFO">
+  Logging verbosity level.
+  
+  **Options**: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`
+</ParamField>
+
+<ParamField path="CACHE_DIR" type="string" default="~/.cache/sec-edgar-mcp">
+  Directory for caching ticker-to-CIK mappings and other data.
+</ParamField>
+
+## Setting Environment Variables
+
+<Tabs>
+  <Tab title="Linux/macOS">
+    ### Temporary (Current Session)
+    ```bash
+    export SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    export LOG_LEVEL="DEBUG"
+    ```
+    
+    ### Permanent (All Sessions)
+    Add to `~/.bashrc`, `~/.zshrc`, or `~/.profile`:
+    ```bash
+    echo 'export SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+  </Tab>
+  
+  <Tab title="Windows">
+    ### Command Prompt
+    ```cmd
+    set SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    ```
+    
+    ### PowerShell
+    ```powershell
+    $env:SEC_EDGAR_USER_AGENT = "Your Name (your.email@domain.com)"
+    ```
+    
+    ### Permanent (System-wide)
+    1. Open System Properties → Advanced → Environment Variables
+    2. Add new system variable: `SEC_EDGAR_USER_AGENT`
+    3. Restart applications to pick up changes
+  </Tab>
+  
+  <Tab title="Docker">
+    ### Docker Run
+    ```bash
+    docker run -e SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)" \
+               -e LOG_LEVEL="DEBUG" \
+               stefanoamorelli/sec-edgar-mcp:latest
+    ```
+    
+    ### Docker Compose
+    ```yaml
+    version: '3.8'
+    services:
+      sec-edgar-mcp:
+        image: stefanoamorelli/sec-edgar-mcp:latest
+        environment:
+          - SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)
+          - LOG_LEVEL=INFO
+    ```
+  </Tab>
+</Tabs>
+
+## MCP Client Configuration
+
+Configure your MCP client to use SEC EDGAR MCP:
+
+### Claude Desktop
+
+<CodeGroup>
+```json macOS
+{
+  "mcpServers": {
+    "sec-edgar-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-e",
+        "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+        "stefanoamorelli/sec-edgar-mcp:latest"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+```json Windows
+{
+  "mcpServers": {
+    "sec-edgar-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-e",
+        "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+        "stefanoamorelli/sec-edgar-mcp:latest"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+```json Local Development
+{
+  "mcpServers": {
+    "sec-edgar-mcp": {
+      "command": "uv",
+      "args": ["run", "sec-edgar-mcp"],
+      "cwd": "/path/to/sec-edgar-mcp",
+      "env": {
+        "SEC_EDGAR_USER_AGENT": "Your Name (your.email@domain.com)",
+        "PYTHONPATH": "/path/to/sec-edgar-mcp"
+      }
+    }
+  }
+}
+```
+</CodeGroup>
+
+### Cline (VS Code)
+
+Add to your VS Code settings (`settings.json`):
+
+```json
+{
+  "cline.mcpServers": {
+    "sec-edgar-mcp": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-e",
+        "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+        "stefanoamorelli/sec-edgar-mcp:latest"
+      ]
+    }
+  }
+}
+```
+
+### Continue.dev
+
+Add to your Continue configuration:
+
+```json
+{
+  "models": [
+    {
+      "title": "Claude with SEC EDGAR",
+      "provider": "anthropic",
+      "model": "claude-3-sonnet",
+      "mcpServers": {
+        "sec-edgar-mcp": {
+          "command": "docker",
+          "args": [
+            "run",
+            "--rm",
+            "-e",
+            "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+            "stefanoamorelli/sec-edgar-mcp:latest"
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+## Advanced Configuration
+
+### Performance Tuning
+
+<AccordionGroup>
+  <Accordion title="Caching Configuration" icon="database">
+    SEC EDGAR MCP caches ticker-to-CIK mappings for better performance:
+    
+    ```bash
+    # Custom cache directory
+    export CACHE_DIR="/opt/sec-edgar-cache"
+    
+    # Clear cache if needed
+    rm -rf ~/.cache/sec-edgar-mcp
+    ```
+    
+    The cache is automatically managed and refreshed as needed.
+  </Accordion>
+  
+  <Accordion title="Timeout Settings" icon="clock">
+    Configure request timeouts for slow connections:
+    
+    ```bash
+    # Increase timeout for slow connections (in seconds)
+    export SEC_REQUEST_TIMEOUT=30
+    
+    # Retry configuration
+    export SEC_MAX_RETRIES=3
+    export SEC_RETRY_DELAY=1
+    ```
+  </Accordion>
+  
+  <Accordion title="Rate Limiting" icon="gauge">
+    Respect SEC EDGAR rate limits:
+    
+    ```bash
+    # Minimum delay between requests (in seconds)
+    export SEC_REQUEST_DELAY=0.1
+    
+    # Maximum requests per second
+    export SEC_MAX_RPS=10
+    ```
+    
+    <Info>
+      The SEC EDGAR API has a rate limit of 10 requests per second. The MCP server handles this automatically.
+    </Info>
+  </Accordion>
+</AccordionGroup>
+
+### Proxy Configuration
+
+If you're behind a corporate proxy:
+
+```bash
+# HTTP proxy
+export HTTP_PROXY=http://proxy.company.com:8080
+export HTTPS_PROXY=http://proxy.company.com:8080
+
+# Proxy with authentication
+export HTTP_PROXY=http://username:password@proxy.company.com:8080
+
+# No proxy for local addresses
+export NO_PROXY=localhost,127.0.0.1,.company.com
+```
+
+### Logging Configuration
+
+Control logging output for debugging:
+
+```bash
+# Set log level
+export LOG_LEVEL=DEBUG
+
+# Log to file
+export LOG_FILE=/var/log/sec-edgar-mcp.log
+
+# Disable colored output
+export NO_COLOR=1
+```
+
+## Configuration Best Practices
+
+<Steps>
+  <Step title="Use Environment Files">
+    Create a `.env` file for your configuration:
+    
+    ```bash
+    # .env file
+    SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    LOG_LEVEL=INFO
+    CACHE_DIR=/opt/sec-edgar-cache
+    ```
+    
+    Load it before running:
+    ```bash
+    source .env
+    docker run --env-file .env stefanoamorelli/sec-edgar-mcp:latest
+    ```
+  </Step>
+  
+  <Step title="Validate Configuration">
+    Test your configuration before using in production:
+    
+    ```bash
+    # Test configuration
+    docker run --rm \
+      -e SEC_EDGAR_USER_AGENT="$SEC_EDGAR_USER_AGENT" \
+      stefanoamorelli/sec-edgar-mcp:latest \
+      --validate-config
+    ```
+  </Step>
+  
+  <Step title="Secure Sensitive Data">
+    Never commit sensitive configuration to version control:
+    
+    ```bash
+    # Add to .gitignore
+    echo ".env" >> .gitignore
+    echo "*.env" >> .gitignore
+    ```
+  </Step>
+</Steps>
+
+## Troubleshooting Configuration
+
+<AccordionGroup>
+  <Accordion title="Environment variable not recognized" icon="variable">
+    **Problem**: Configuration changes aren't taking effect
+    
+    **Solutions**:
+    1. Verify the variable is exported: `echo $SEC_EDGAR_USER_AGENT`
+    2. Restart your MCP client completely
+    3. Check for typos in variable names
+    4. Ensure no quotes in the actual environment value
+  </Accordion>
+  
+  <Accordion title="Invalid user agent format" icon="user">
+    **Problem**: SEC EDGAR API rejects requests
+    
+    **Solutions**:
+    1. Ensure format is exactly: `"Name (email@domain.com)"`
+    2. Use a valid email address
+    3. Don't use special characters in the name
+    4. Test with curl:
+       ```bash
+       curl -H "User-Agent: Your Name (your.email@domain.com)" \
+         https://data.sec.gov/api/xbrl/companyconcept/CIK0000320193/us-gaap/Assets.json
+       ```
+  </Accordion>
+  
+  <Accordion title="Proxy connection issues" icon="shield">
+    **Problem**: Cannot connect through corporate proxy
+    
+    **Solutions**:
+    1. Verify proxy settings: `curl -I https://data.sec.gov`
+    2. Check proxy authentication credentials
+    3. Ensure proxy allows HTTPS connections
+    4. Try proxy bypass for SEC domains if allowed
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Client Integration"
+    icon="plug"
+    href="/sec-edgar-mcp-docs/setup/client-integration"
+  >
+    Connect SEC EDGAR MCP to your AI assistant
+  </Card>
+  <Card
+    title="First Query"
+    icon="magnifying-glass"
+    href="/sec-edgar-mcp-docs/usage/first-query"
+  >
+    Make your first SEC EDGAR query
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

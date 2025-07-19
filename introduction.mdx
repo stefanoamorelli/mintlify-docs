@@ -29,7 +29,7 @@ SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provide
     icon="wrench"
     href="/tools/overview"
   >
-    Explore all available MCP tools
+    Explore all 22 available MCP tools
   </Card>
   <Card
     title="Usage Examples"
@@ -96,27 +96,32 @@ SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provide
 
 Here's how easy it is to get started:
 
-```text
-You: "What was Apple's revenue in the last quarter?"
-Assistant: I'll use the get_cik_by_ticker tool to find Apple's CIK, then get_company_concepts to retrieve their latest revenue data.
+```python
+# Get Apple's latest 10-K filing
+response = await mcp.call_tool(
+    "get_recent_filings_smart",
+    ticker="AAPL",
+    form_type="10-K",
+    limit=1
+)
 
-🔧 Tools used: get_cik_by_ticker, get_company_concepts
-📊 Result: Apple's Q4 2024 revenue was $119.58 billion, up 6% year-over-year
+# Extract business description
+sections = await mcp.call_tool(
+    "get_filing_txt_sections",
+    url=response["filings"][0]["txtUrl"],
+    sections=["item_1"]
+)
 ```
 
 ## Prerequisites
 
 <Warning>
-  **Important**: No registration is required, but according to [SEC API policy](https://www.sec.gov/search-filings/edgar-application-programming-interfaces), you must set a User-Agent header containing your email address for all requests. Set the `SEC_EDGAR_USER_AGENT` environment variable in the format: `"Your Name (your.email@domain.com)"`
+  **Important**: You must register your email with the SEC to use their EDGAR API. Set the `SEC_EDGAR_USER_AGENT` environment variable in the format: `"Your Name (your.email@domain.com)"`
 </Warning>
-
-<Note>
-  **API Compliance**: Since this package uses the official SEC EDGAR API, you must respect [SEC API restrictions and data policy](https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data). This includes rate limits and proper User-Agent identification as required by SEC policy.
-</Note>
 
 - Python 3.11 or higher
 - An MCP-compatible client (Claude Desktop, Cline, Continue.dev, etc.)
-- SEC EDGAR User-Agent header configuration
+- SEC EDGAR user agent registration
 
 ## Getting Help
 

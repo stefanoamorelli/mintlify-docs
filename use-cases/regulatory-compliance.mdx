@@ -1,0 +1,91 @@
+---
+title: 'Regulatory Compliance'
+description: 'Using SEC EDGAR MCP for regulatory compliance and monitoring'
+icon: 'shield-check'
+---
+
+<Warning>
+**Important Disclaimer**: EDGAR® and SEC® are trademarks of the U.S. Securities and Exchange Commission. This open-source project is created by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/) and built by the community is not affiliated with or approved by the U.S. Securities and Exchange Commission.
+</Warning>
+
+SEC EDGAR MCP helps compliance professionals monitor regulatory filings, track disclosure requirements, and ensure adherence to securities regulations.
+
+## Key Applications
+
+<CardGroup cols={2}>
+  <Card title="Disclosure Monitoring" icon="eye">
+    Track mandatory disclosures and filing deadlines
+  </Card>
+  <Card title="Insider Trading Analysis" icon="user-secret">
+    Monitor Form 4 filings for insider transactions
+  </Card>
+  <Card title="Proxy Compliance" icon="vote">
+    Analyze proxy statements for governance compliance
+  </Card>
+  <Card title="Risk Assessment" icon="triangle-exclamation">
+    Identify compliance risks in filings
+  </Card>
+</CardGroup>
+
+## Compliance Monitoring Workflows
+
+### Filing Deadline Tracking
+
+```text
+You: "Monitor Apple for any late filings or compliance issues in their recent SEC submissions"
+
+Assistant: I'll check Apple's recent SEC filing compliance and any potential issues.
+
+🔧 Tools used: get_cik_by_ticker, get_submissions, get_filing_txt_sections
+
+📊 Compliance Status:
+• All required filings submitted on time
+• 10-K filed: September 28, 2024 (on schedule)
+• Latest 10-Q: October 31, 2024 (within deadline)
+• 8-K filings: 12 in past year (all timely)
+
+✅ No compliance issues detected
+• No amended filings (indicating errors)
+• No NT (Non-Timely) filings
+• All deadlines met for fiscal year 2024
+```
+
+### Insider Trading Monitoring
+
+```text
+You: "Track recent insider trading activity at Apple and flag any large transactions"
+
+Assistant: I'll analyze recent Form 4 filings for insider trading activity at Apple.
+
+🔧 Tools used: get_submissions, get_filing_txt_sections
+
+📊 Insider Trading Summary (Last 30 days):
+• Total Form 4 filings: 18
+• Insiders trading: 7 executives/directors
+• Total value: $142.3 million
+
+🚩 Large Transactions Flagged:
+• Tim Cook (CEO): Sold 511,000 shares @ $189.50 ($96.8M)
+  - Part of pre-arranged 10b5-1 plan
+  - Filed within 2 business days ✅
+
+• Luca Maestri (CFO): Sold 85,000 shares @ $188.25 ($16.0M)
+  - Scheduled vesting and sale
+  - Proper disclosure ✅
+
+🔍 All transactions appear compliant with SEC rules
+```
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools" href="/tools/overview">
+    Explore all available MCP tools for regulatory compliance
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

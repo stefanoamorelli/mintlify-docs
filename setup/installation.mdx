@@ -1,0 +1,323 @@
+---
+title: 'Installation'
+description: 'Detailed installation guide for SEC EDGAR MCP'
+icon: 'download'
+---
+
+This guide covers all installation methods for SEC EDGAR MCP with detailed instructions and troubleshooting tips.
+
+## Prerequisites
+
+<Info>
+  Before installing SEC EDGAR MCP, ensure you have:
+  - Python 3.11 or higher (for local installation)
+  - Docker (for Docker installation)
+  - A valid email address to register with SEC EDGAR
+  - An MCP-compatible client
+</Info>
+
+## Installation Methods
+
+### Docker Installation (Recommended)
+
+Docker provides the easiest and most consistent installation experience.
+
+<Steps>
+  <Step title="Install Docker">
+    If you don't have Docker installed:
+    - **macOS**: Download [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop)
+    - **Windows**: Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop)
+    - **Linux**: Follow the [official Docker installation guide](https://docs.docker.com/engine/install/)
+  </Step>
+  
+  <Step title="Pull the Docker Image">
+    ```bash
+    docker pull stefanoamorelli/sec-edgar-mcp:latest
+    ```
+  </Step>
+  
+  <Step title="Verify the Installation">
+    ```bash
+    docker run --rm stefanoamorelli/sec-edgar-mcp:latest --version
+    ```
+  </Step>
+</Steps>
+
+### Local Installation with UV
+
+UV is a fast Python package manager that simplifies dependency management.
+
+<Steps>
+  <Step title="Install UV">
+    ```bash
+    # macOS and Linux
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    
+    # Windows (PowerShell)
+    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
+  </Step>
+  
+  <Step title="Clone the Repository">
+    ```bash
+    git clone https://github.com/stefanoamorelli/sec-edgar-mcp.git
+    cd sec-edgar-mcp
+    ```
+  </Step>
+  
+  <Step title="Install Dependencies">
+    ```bash
+    uv sync
+    ```
+  </Step>
+  
+  <Step title="Set Python Path (for development)">
+    ```bash
+    export PYTHONPATH=/path/to/sec-edgar-mcp:$PYTHONPATH
+    ```
+  </Step>
+</Steps>
+
+### Conda Installation
+
+Install from the Anaconda Cloud repository.
+
+<Steps>
+  <Step title="Install Anaconda or Miniconda">
+    Download from [Anaconda.com](https://www.anaconda.com/products/individual) if not already installed.
+  </Step>
+  
+  <Step title="Create a New Environment (Optional)">
+    ```bash
+    conda create -n sec-edgar-mcp python=3.11
+    conda activate sec-edgar-mcp
+    ```
+  </Step>
+  
+  <Step title="Install the Package">
+    ```bash
+    conda install -c stefanoamorelli sec-edgar-mcp
+    ```
+  </Step>
+</Steps>
+
+### Development Installation
+
+For contributors or those who want to modify the code.
+
+<Steps>
+  <Step title="Fork and Clone">
+    ```bash
+    # Fork the repository on GitHub first
+    git clone https://github.com/YOUR_USERNAME/sec-edgar-mcp.git
+    cd sec-edgar-mcp
+    ```
+  </Step>
+  
+  <Step title="Create Virtual Environment">
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+  </Step>
+  
+  <Step title="Install in Development Mode">
+    ```bash
+    pip install -e ".[dev]"
+    ```
+  </Step>
+  
+  <Step title="Install Pre-commit Hooks">
+    ```bash
+    pre-commit install
+    ```
+  </Step>
+</Steps>
+
+## Platform-Specific Instructions
+
+<Tabs>
+  <Tab title="macOS">
+    ### System Requirements
+    - macOS 10.15 (Catalina) or later
+    - Xcode Command Line Tools (for git)
+    
+    ### Additional Steps
+    1. Install Homebrew (if needed):
+       ```bash
+       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+       ```
+    
+    2. Install Python 3.11+:
+       ```bash
+       brew install python@3.11
+       ```
+    
+    ### Known Issues
+    - If you encounter SSL certificate errors, update certificates:
+      ```bash
+      brew install ca-certificates
+      ```
+  </Tab>
+  
+  <Tab title="Windows">
+    ### System Requirements
+    - Windows 10 version 2004 or later
+    - WSL2 (recommended) or native Python
+    
+    ### WSL2 Installation (Recommended)
+    1. Enable WSL2:
+       ```powershell
+       wsl --install
+       ```
+    
+    2. Install Ubuntu from Microsoft Store
+    
+    3. Follow Linux installation instructions within WSL2
+    
+    ### Native Windows Installation
+    1. Install Python from [python.org](https://www.python.org/downloads/)
+    2. Use PowerShell or Command Prompt for installation commands
+    
+    ### Path Configuration
+    Add to your PATH if needed:
+    ```powershell
+    $env:Path += ";C:\Users\YOUR_USERNAME\AppData\Local\Programs\Python\Python311"
+    ```
+  </Tab>
+  
+  <Tab title="Linux">
+    ### Debian/Ubuntu
+    ```bash
+    # Install Python 3.11
+    sudo apt update
+    sudo apt install python3.11 python3.11-venv python3-pip
+    
+    # Install git
+    sudo apt install git
+    ```
+    
+    ### Fedora/RHEL
+    ```bash
+    # Install Python 3.11
+    sudo dnf install python3.11 python3.11-devel
+    
+    # Install git
+    sudo dnf install git
+    ```
+    
+    ### Arch Linux
+    ```bash
+    # Install Python and git
+    sudo pacman -S python git
+    ```
+  </Tab>
+</Tabs>
+
+## Verifying Your Installation
+
+After installation, verify everything is working:
+
+<CodeGroup>
+```bash Docker
+# Check Docker installation
+docker run --rm -e SEC_EDGAR_USER_AGENT="Test User (test@example.com)" \
+  stefanoamorelli/sec-edgar-mcp:latest --help
+```
+
+```bash Local/UV
+# Activate virtual environment if using one
+cd sec-edgar-mcp
+
+# Check installation
+uv run python -m sec_edgar_mcp.server --help
+```
+
+```bash Conda
+# Activate conda environment
+conda activate sec-edgar-mcp
+
+# Check installation
+python -m sec_edgar_mcp.server --help
+```
+</CodeGroup>
+
+## Common Installation Issues
+
+<AccordionGroup>
+  <Accordion title="Python version mismatch" icon="python">
+    **Error**: `Python 3.11+ is required`
+    
+    **Solution**:
+    1. Check your Python version: `python --version`
+    2. Install Python 3.11 or later
+    3. Use `python3.11` explicitly if multiple versions are installed
+    4. Consider using pyenv for Python version management
+  </Accordion>
+  
+  <Accordion title="Permission denied errors" icon="lock">
+    **Error**: `Permission denied` during installation
+    
+    **Solution**:
+    - Don't use `sudo` with pip
+    - Use virtual environments instead
+    - For Docker, ensure your user is in the docker group:
+      ```bash
+      sudo usermod -aG docker $USER
+      newgrp docker
+      ```
+  </Accordion>
+  
+  <Accordion title="Network/SSL errors" icon="shield-halved">
+    **Error**: SSL certificate verification failed
+    
+    **Solution**:
+    1. Update certificates:
+       - macOS: `brew install ca-certificates`
+       - Linux: `sudo apt-get install ca-certificates`
+    
+    2. If behind a corporate proxy, configure proxy settings:
+       ```bash
+       export HTTP_PROXY=http://proxy.company.com:8080
+       export HTTPS_PROXY=http://proxy.company.com:8080
+       ```
+  </Accordion>
+  
+  <Accordion title="Docker connection issues" icon="docker">
+    **Error**: Cannot connect to Docker daemon
+    
+    **Solution**:
+    1. Ensure Docker Desktop is running
+    2. Check Docker service status:
+       ```bash
+       docker info
+       ```
+    3. Restart Docker service if needed
+    4. On Linux, ensure user has Docker permissions
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Configuration"
+    icon="gear"
+    href="/sec-edgar-mcp-docs/setup/configuration"
+  >
+    Configure SEC EDGAR MCP for your needs
+  </Card>
+  <Card
+    title="Client Integration"
+    icon="plug"
+    href="/sec-edgar-mcp-docs/setup/client-integration"
+  >
+    Connect to your MCP client
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

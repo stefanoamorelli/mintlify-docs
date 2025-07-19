@@ -1,0 +1,350 @@
+---
+title: 'get_filing_txt'
+description: 'Retrieve full text content of SEC filings'
+icon: 'file-text'
+---
+
+The `get_filing_txt` tool retrieves the complete text content of SEC filings, converting HTML to clean, readable text format.
+
+## Function Signature
+
+```typescript
+get_filing_txt(url: string, timeout?: number) → object
+```
+
+## Parameters
+
+<ParamField path="url" type="string" required>
+  The SEC EDGAR URL to the filing document
+  
+  - Must be a valid SEC EDGAR URL (sec.gov domain)
+  - Should point to the HTML version of the filing
+  - Example: "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240930.htm"
+</ParamField>
+
+<ParamField path="timeout" type="number" default="30">
+  Request timeout in seconds
+  
+  - Maximum: 300 seconds (5 minutes)
+  - Recommended: 30-60 seconds for large filings
+</ParamField>
+
+## Returns
+
+<ResponseField name="url" type="string">
+  The original filing URL
+</ResponseField>
+
+<ResponseField name="content" type="string">
+  The full text content of the filing with HTML tags removed
+</ResponseField>
+
+<ResponseField name="metadata" type="object">
+  Filing metadata including:
+  - `size`: Content size in characters
+  - `retrieval_time`: Time taken to fetch the document
+  - `content_type`: Original document content type
+</ResponseField>
+
+## Example Usage
+
+### Basic Usage
+
+```json
+{
+  "tool": "get_filing_txt",
+  "arguments": {
+    "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240930.htm"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240930.htm",
+  "content": "UNITED STATES\nSECURITIES AND EXCHANGE COMMISSION\nWashington, D.C. 20549\n\nFORM 10-K\n\nANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934...",
+  "metadata": {
+    "size": 1250000,
+    "retrieval_time": 2.35,
+    "content_type": "text/html"
+  }
+}
+```
+
+### With Timeout
+
+```json
+{
+  "tool": "get_filing_txt",
+  "arguments": {
+    "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240930.htm",
+    "timeout": 60
+  }
+}
+```
+
+## Common Use Cases
+
+<AccordionGroup>
+  <Accordion title="Full Document Analysis" icon="magnifying-glass">
+    When you need to analyze the complete filing content:
+    
+    ```python
+    # Get full 10-K content
+    full_content = await mcp.call_tool(
+        "get_filing_txt",
+        {"url": filing_url}
+    )
+    
+    # Search for specific terms
+    risk_mentions = full_content["content"].lower().count("risk")
+    ai_mentions = full_content["content"].lower().count("artificial intelligence")
+    
+    # Analyze document structure
+    sections = full_content["content"].split("ITEM")
+    ```
+  </Accordion>
+  
+  <Accordion title="Content Extraction Pipeline" icon="filter">
+    As part of a larger content processing pipeline:
+    
+    ```python
+    # Step 1: Get filing content
+    content = await mcp.call_tool("get_filing_txt", {"url": url})
+    
+    # Step 2: Process with NLP tools
+    # Step 3: Extract key information
+    # Step 4: Store in database
+    ```
+  </Accordion>
+  
+  <Accordion title="Comparative Analysis" icon="scale-balanced">
+    Compare content across multiple filings:
+    
+    ```python
+    # Compare annual reports across years
+    years = ["2022", "2023", "2024"]
+    annual_reports = {}
+    
+    for year in years:
+        filing_url = get_10k_url_for_year(year)
+        content = await mcp.call_tool("get_filing_txt", {"url": filing_url})
+        annual_reports[year] = content["content"]
+    
+    # Analyze changes in business description over time
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Performance Considerations
+
+<Warning>
+  Large filings (>5MB) may take significant time to process. Consider using `stream_filing_txt_chunks` for very large documents.
+</Warning>
+
+### File Size Guidelines
+
+| Filing Type | Typical Size | Recommended Approach |
+|-------------|--------------|---------------------|
+| 8-K | 50-500 KB | `get_filing_txt` |
+| 10-Q | 1-5 MB | `get_filing_txt` |
+| 10-K | 5-50 MB | `get_filing_txt_sections` or `stream_filing_txt_chunks` |
+| DEF 14A | 2-15 MB | `get_filing_txt` or `stream_filing_txt_chunks` |
+
+### Optimization Tips
+
+<Steps>
+  <Step title="Check File Size First">
+    ```python
+    # Get document info before retrieving full content
+    doc_info = await mcp.call_tool(
+        "get_filing_document_info",
+        {"url": filing_url}
+    )
+    
+    if doc_info["size"] > 10_000_000:  # 10MB
+        # Use streaming approach
+        pass
+    ```
+  </Step>
+  
+  <Step title="Use Appropriate Timeout">
+    ```python
+    # Adjust timeout based on expected file size
+    timeout = min(60, max(30, file_size_mb * 5))
+    
+    content = await mcp.call_tool(
+        "get_filing_txt",
+        {"url": url, "timeout": timeout}
+    )
+    ```
+  </Step>
+  
+  <Step title="Cache Results">
+    ```python
+    # Cache processed content to avoid repeated requests
+    content_cache = {}
+    
+    if url not in content_cache:
+        content_cache[url] = await mcp.call_tool(
+            "get_filing_txt",
+            {"url": url}
+        )
+    ```
+  </Step>
+</Steps>
+
+## Content Processing
+
+### Text Cleaning
+
+The tool automatically:
+- Removes HTML tags and styling
+- Converts HTML entities to text
+- Preserves document structure with line breaks
+- Removes excessive whitespace
+
+### Post-Processing Example
+
+```python
+# Get filing content
+filing_content = await mcp.call_tool(
+    "get_filing_txt",
+    {"url": filing_url}
+)
+
+# Further processing
+text = filing_content["content"]
+
+# Extract sections
+sections = {}
+current_section = None
+current_content = []
+
+for line in text.split('\n'):
+    if line.strip().startswith('ITEM'):
+        if current_section:
+            sections[current_section] = '\n'.join(current_content)
+        current_section = line.strip()
+        current_content = []
+    else:
+        current_content.append(line)
+
+# Add final section
+if current_section:
+    sections[current_section] = '\n'.join(current_content)
+```
+
+## Error Handling
+
+<AccordionGroup>
+  <Accordion title="Network Errors" icon="wifi">
+    Handle connection issues and timeouts:
+    
+    ```python
+    try:
+        content = await mcp.call_tool(
+            "get_filing_txt",
+            {"url": url, "timeout": 60}
+        )
+    except TimeoutError:
+        # Retry with longer timeout or use streaming
+        content = await mcp.call_tool(
+            "stream_filing_txt_chunks",
+            {"url": url, "chunk_size": 5000}
+        )
+    ```
+  </Accordion>
+  
+  <Accordion title="Invalid URLs" icon="link">
+    Validate URLs before processing:
+    
+    ```python
+    def validate_sec_url(url):
+        return url.startswith("https://www.sec.gov/Archives/edgar/")
+    
+    if not validate_sec_url(filing_url):
+        raise ValueError("Invalid SEC EDGAR URL")
+    ```
+  </Accordion>
+  
+  <Accordion title="Rate Limiting" icon="clock">
+    Handle SEC rate limits gracefully:
+    
+    ```python
+    import time
+    
+    try:
+        content = await mcp.call_tool("get_filing_txt", {"url": url})
+    except RateLimitError:
+        time.sleep(1)  # Wait before retry
+        content = await mcp.call_tool("get_filing_txt", {"url": url})
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Info>
+  For structured analysis, consider using `get_filing_txt_sections` instead of processing the full document.
+</Info>
+
+<Steps>
+  <Step title="Choose the Right Tool">
+    - Use `get_filing_txt` for complete document analysis
+    - Use `get_filing_txt_sections` for specific sections
+    - Use `stream_filing_txt_chunks` for very large files
+  </Step>
+  
+  <Step title="Implement Caching">
+    Cache content to avoid repeated requests for the same filing
+  </Step>
+  
+  <Step title="Monitor Performance">
+    Track retrieval times and adjust timeouts accordingly
+  </Step>
+  
+  <Step title="Handle Errors Gracefully">
+    Implement retry logic for transient failures
+  </Step>
+</Steps>
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card 
+    title="get_filing_txt_sections" 
+    icon="scissors"
+    href="/tools/filings/get-filing-txt-sections"
+  >
+    Extract specific sections from filings
+  </Card>
+  <Card 
+    title="stream_filing_txt_chunks" 
+    icon="stream"
+    href="/tools/filings/stream-filing-txt-chunks"
+  >
+    Stream large filings in chunks
+  </Card>
+  <Card 
+    title="get_filing_document_info" 
+    icon="info"
+    href="/tools/filings/get-filing-document-info"
+  >
+    Get filing metadata before retrieval
+  </Card>
+  <Card 
+    title="get_filing_best_content" 
+    icon="star"
+    href="/tools/filings/get-filing-best-content"
+  >
+    Smart content retrieval with fallbacks
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

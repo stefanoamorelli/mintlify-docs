@@ -1,0 +1,333 @@
+---
+title: 'Security'
+description: 'Security practices and guidelines for SEC EDGAR MCP'
+icon: 'shield-halved'
+---
+
+SEC EDGAR MCP follows OWASP Tallinn Secure Software Practices to ensure the security and integrity of the project. This page outlines our security practices, vulnerability reporting process, and guidelines for secure usage.
+
+## Security Practices
+
+<Info>
+  SEC EDGAR MCP is designed with security as a core principle, following industry best practices for open-source software development.
+</Info>
+
+### Code Security
+
+<AccordionGroup>
+  <Accordion title="No Secrets in Code" icon="key">
+    - **Never** commit API keys, tokens, or credentials
+    - All sensitive data must be passed via environment variables
+    - `.gitignore` includes common secret file patterns
+    - Pre-commit hooks check for potential secrets
+    
+    ```bash
+    # Good: Using environment variables
+    export SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    
+    # Bad: Hardcoding in source
+    USER_AGENT = "Your Name (your.email@domain.com)"  # Never do this
+    ```
+  </Accordion>
+  
+  <Accordion title="Dependency Management" icon="package">
+    - All dependencies are **pinned** to specific versions
+    - Regular security audits using `pip audit`
+    - Automated dependency updates via Dependabot
+    - Lock files (`uv.lock`) ensure reproducible builds
+    
+    ```toml
+    # pyproject.toml - Pinned dependencies
+    dependencies = [
+        "mcp[cli]>=1.7.1",
+        "secedgar==0.6.0a0",
+        "beautifulsoup4>=4.12.0",
+        "requests>=2.31.0"
+    ]
+    ```
+  </Accordion>
+  
+  <Accordion title="Input Validation" icon="filter">
+    All user inputs are validated and sanitized:
+    
+    - CIK format validation (10 digits)
+    - URL validation for filing access
+    - Parameter type checking
+    - Size limits on responses
+    
+    ```python
+    # Example validation
+    def validate_cik(cik: str) -> str:
+        if not cik.isdigit() or len(cik) != 10:
+            raise ValueError("CIK must be 10 digits")
+        return cik
+    ```
+  </Accordion>
+  
+  <Accordion title="Secure Communication" icon="lock">
+    - All SEC EDGAR API calls use HTTPS
+    - SSL certificate verification enabled
+    - No storage of sensitive user data
+    - Stateless operation (no session persistence)
+  </Accordion>
+</AccordionGroup>
+
+### Development Security
+
+<Steps>
+  <Step title="Code Review Required">
+    All changes must be reviewed before merging:
+    - Pull request reviews by maintainers
+    - Automated security checks via GitHub Actions
+    - No direct commits to main branch
+  </Step>
+  
+  <Step title="Signed Commits Encouraged">
+    We encourage GPG-signed commits:
+    ```bash
+    # Configure git for signing
+    git config --global user.signingkey YOUR_KEY_ID
+    git config --global commit.gpgsign true
+    ```
+  </Step>
+  
+  <Step title="Security Testing">
+    Regular security testing includes:
+    - Static analysis with `bandit`
+    - Dependency vulnerability scanning
+    - Container image scanning (for Docker)
+  </Step>
+</Steps>
+
+## Vulnerability Reporting
+
+<Warning>
+  **Found a security vulnerability?** Please report it responsibly to help us keep SEC EDGAR MCP secure for everyone.
+</Warning>
+
+### Reporting Process
+
+1. **Do NOT** create a public GitHub issue
+2. Email security concerns to: `security@[maintainer-domain].com`
+3. Include:
+   - Description of the vulnerability
+   - Steps to reproduce
+   - Potential impact
+   - Suggested fix (if any)
+
+### What to Expect
+
+<Timeline>
+  <TimelineItem title="Acknowledgment" subtitle="Within 48 hours">
+    We'll acknowledge receipt of your report
+  </TimelineItem>
+  
+  <TimelineItem title="Initial Assessment" subtitle="Within 7 days">
+    We'll provide an initial assessment and timeline
+  </TimelineItem>
+  
+  <TimelineItem title="Fix Development" subtitle="Varies">
+    We'll work on a fix, keeping you updated
+  </TimelineItem>
+  
+  <TimelineItem title="Coordinated Disclosure" subtitle="When ready">
+    We'll coordinate disclosure and credit you (if desired)
+  </TimelineItem>
+</Timeline>
+
+## Security Best Practices for Users
+
+### Environment Configuration
+
+<Tabs>
+  <Tab title="Docker Security">
+    Run containers with minimal privileges:
+    
+    ```bash
+    # Good: Read-only container with dropped capabilities
+    docker run --read-only \
+      --cap-drop ALL \
+      --security-opt no-new-privileges \
+      -e SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)" \
+      stefanoamorelli/sec-edgar-mcp:latest
+    
+    # Limit resources
+    docker run --memory="512m" --cpus="1" \
+      -e SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)" \
+      stefanoamorelli/sec-edgar-mcp:latest
+    ```
+  </Tab>
+  
+  <Tab title="Local Installation">
+    Secure your local installation:
+    
+    ```bash
+    # Use virtual environments
+    python -m venv venv
+    source venv/bin/activate
+    
+    # Install with hash verification
+    pip install --require-hashes -r requirements.txt
+    
+    # Regular updates
+    pip list --outdated
+    pip install --upgrade sec-edgar-mcp
+    ```
+  </Tab>
+  
+  <Tab title="Network Security">
+    Configure network security:
+    
+    ```bash
+    # Use proxy if required
+    export HTTPS_PROXY=https://proxy.company.com:8080
+    
+    # Verify SSL certificates (default)
+    export REQUESTS_CA_BUNDLE=/path/to/ca-bundle.crt
+    
+    # Network isolation for containers
+    docker network create --driver bridge sec-edgar-net
+    docker run --network sec-edgar-net ...
+    ```
+  </Tab>
+</Tabs>
+
+### Data Handling
+
+<Cards>
+  <Card title="No Credential Storage" icon="database">
+    SEC EDGAR MCP never stores:
+    - User credentials
+    - API keys
+    - Personal information
+    - Query history
+  </Card>
+  
+  <Card title="Cache Security" icon="server">
+    The ticker cache is:
+    - Local only
+    - Read-only data
+    - No sensitive information
+    - Cleared on restart
+  </Card>
+  
+  <Card title="Log Security" icon="file-shield">
+    Logs never contain:
+    - Full URLs with parameters
+    - User agent details
+    - Response data
+    - Error stack traces with secrets
+  </Card>
+</Cards>
+
+### Secure Usage Guidelines
+
+<AccordionGroup>
+  <Accordion title="API Key Management" icon="key">
+    If extending SEC EDGAR MCP:
+    
+    ```python
+    # Good: Environment variables
+    import os
+    api_key = os.environ.get("MY_API_KEY")
+    if not api_key:
+        raise ValueError("MY_API_KEY not set")
+    
+    # Bad: Hardcoded keys
+    api_key = "sk-1234567890abcdef"  # Never do this
+    
+    # Good: Secure key storage
+    from keyring import get_password
+    api_key = get_password("sec-edgar-mcp", "api_key")
+    ```
+  </Accordion>
+  
+  <Accordion title="Rate Limiting" icon="gauge">
+    Respect SEC EDGAR rate limits:
+    
+    - Maximum 10 requests per second
+    - Use built-in rate limiting
+    - Implement exponential backoff
+    - Cache responses when possible
+    
+    ```python
+    # Built-in rate limiting
+    from time import sleep
+    sleep(0.1)  # 100ms between requests
+    ```
+  </Accordion>
+  
+  <Accordion title="Error Handling" icon="bug">
+    Handle errors securely:
+    
+    ```python
+    try:
+        result = await mcp.call_tool("get_filing", {...})
+    except Exception as e:
+        # Log safely without exposing sensitive data
+        logger.error(f"Filing retrieval failed: {type(e).__name__}")
+        # Don't log full error with potential secrets
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Compliance and Privacy
+
+### GDPR Compliance
+
+SEC EDGAR MCP:
+- Processes only publicly available SEC data
+- Does not collect personal user data
+- Does not track usage or analytics
+- Allows full data portability
+
+### SEC Terms of Use
+
+Users must comply with SEC EDGAR terms:
+- Provide valid user agent
+- Respect rate limits
+- Use data appropriately
+- No excessive automated requests
+
+## Security Checklist
+
+Before deploying SEC EDGAR MCP:
+
+<Checklist>
+  <Check>Set `SEC_EDGAR_USER_AGENT` environment variable</Check>
+  <Check>Use latest version of SEC EDGAR MCP</Check>
+  <Check>Configure proper network isolation</Check>
+  <Check>Enable SSL verification (default)</Check>
+  <Check>Review container security settings</Check>
+  <Check>Implement proper error handling</Check>
+  <Check>Set up monitoring and logging</Check>
+  <Check>Plan for security updates</Check>
+</Checklist>
+
+## Reporting Security Issues
+
+<Card title="Security Contact" icon="envelope" href="mailto:security@[maintainer-domain].com">
+  Report security vulnerabilities privately via email. We appreciate responsible disclosure and will credit researchers who help improve our security.
+</Card>
+
+## Security Updates
+
+Stay informed about security updates:
+
+<CardGroup cols={3}>
+  <Card title="GitHub Releases" icon="github" href="https://github.com/stefanoamorelli/sec-edgar-mcp/releases">
+    Monitor releases for security patches
+  </Card>
+  <Card title="Security Advisories" icon="shield" href="https://github.com/stefanoamorelli/sec-edgar-mcp/security/advisories">
+    Check security advisories
+  </Card>
+  <Card title="Dependencies" icon="package" href="https://github.com/stefanoamorelli/sec-edgar-mcp/network/dependencies">
+    Track dependency updates
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

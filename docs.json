@@ -1,115 +1,106 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "SEC EDGAR MCP",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#2563EB",
+    "light": "#3B82F6",
+    "dark": "#1E40AF"
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "tabs": [
+    "groups": [
       {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
+        "group": "Introduction",
+        "pages": [
+          "introduction",
+          "motivation"
         ]
       },
       {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
+        "group": "Setup",
+        "pages": [
+          "setup/quickstart",
+          "setup/installation",
+          "setup/configuration",
+          "setup/client-integration"
+        ]
+      },
+      {
+        "group": "Usage",
+        "pages": [
+          "usage/first-query",
+          "usage/examples"
+        ]
+      },
+      {
+        "group": "Tools",
+        "pages": [
+          "tools/overview"
+        ]
+      },
+      {
+        "group": "Use Cases",
+        "pages": [
+          "use-cases/financial-analysis",
+          "use-cases/regulatory-compliance",
+          "use-cases/investment-research",
+          "use-cases/academic-research"
+        ]
+      },
+      {
+        "group": "Community",
+        "pages": [
+          "security",
+          "contributing",
+          "attribution",
+          "license"
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
+  "anchors": [
+    {
+      "name": "GitHub Repo",
+      "url": "https://github.com/stefanoamorelli/sec-edgar-mcp",
+      "icon": "github"
+    },
+    {
+      "name": "Propose features or report bugs",
+      "url": "https://github.com/stefanoamorelli/sec-edgar-mcp/issues",
+      "icon": "circle-exclamation"
+    },
+    {
+      "name": "Use cases",
+      "url": "/use-cases/financial-analysis",
+      "icon": "chart-line"
+    }
+  ],
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/images/sec-edgar-mcp-logo.png",
+    "dark": "/images/sec-edgar-mcp-logo.png",
+    "width": 200,
+    "height": 60
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:stefano@amorelli.tech"
       }
     ],
     "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "type": "github",
+      "label": "Star on GitHub",
+      "href": "https://github.com/stefanoamorelli/sec-edgar-mcp",
+      "color": "white"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+      "github": "https://github.com/stefanoamorelli/sec-edgar-mcp",
+      "linkedin": "https://linkedin.com/in/stefanoamorelli"
+    },
+    "copyright": "Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community."
   }
 }

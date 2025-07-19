@@ -1,0 +1,236 @@
+---
+title: 'get_cik_by_ticker'
+description: 'Convert stock ticker symbols to CIK (Central Index Key) numbers'
+icon: 'hashtag'
+---
+
+The `get_cik_by_ticker` tool converts stock ticker symbols to their corresponding SEC CIK (Central Index Key) numbers. CIK numbers are required for most SEC EDGAR API operations.
+
+## Function Signature
+
+```typescript
+get_cik_by_ticker(ticker: string) → object
+```
+
+## Parameters
+
+<ParamField path="ticker" type="string" required>
+  The stock ticker symbol to look up (e.g., "AAPL", "MSFT", "GOOGL")
+  
+  - Case-insensitive
+  - Accepts common variations (with or without exchange suffix)
+  - Cached for performance
+</ParamField>
+
+## Returns
+
+<ResponseField name="cik" type="string">
+  The 10-digit CIK number with leading zeros (e.g., "0000320193")
+</ResponseField>
+
+<ResponseField name="ticker" type="string">
+  The normalized ticker symbol
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  The official company name as registered with the SEC
+</ResponseField>
+
+## Example Usage
+
+### Basic Usage
+
+```json
+{
+  "tool": "get_cik_by_ticker",
+  "arguments": {
+    "ticker": "AAPL"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "cik": "0000320193",
+  "ticker": "AAPL",
+  "title": "Apple Inc."
+}
+```
+
+### Multiple Lookups
+
+When analyzing multiple companies:
+
+```python
+# Get CIKs for FAANG stocks
+companies = ["META", "AAPL", "AMZN", "NFLX", "GOOGL"]
+for ticker in companies:
+    result = await mcp.call_tool("get_cik_by_ticker", {"ticker": ticker})
+    print(f"{ticker}: {result['cik']} - {result['title']}")
+```
+
+## Common Use Cases
+
+<AccordionGroup>
+  <Accordion title="Starting Point for Analysis" icon="play">
+    Always use this tool first when working with a company identified by ticker:
+    
+    ```python
+    # Step 1: Get CIK
+    cik_data = await mcp.call_tool("get_cik_by_ticker", {"ticker": "TSLA"})
+    cik = cik_data["cik"]
+    
+    # Step 2: Use CIK for further queries
+    filings = await mcp.call_tool("get_submissions", {"cik": cik})
+    ```
+  </Accordion>
+  
+  <Accordion title="Batch Processing" icon="layer-group">
+    Process multiple companies efficiently:
+    
+    ```python
+    portfolio = ["AAPL", "MSFT", "GOOGL", "AMZN"]
+    cik_map = {}
+    
+    for ticker in portfolio:
+        result = await mcp.call_tool("get_cik_by_ticker", {"ticker": ticker})
+        cik_map[ticker] = result["cik"]
+    ```
+  </Accordion>
+  
+  <Accordion title="Error Handling" icon="shield">
+    Handle invalid tickers gracefully:
+    
+    ```python
+    try:
+        result = await mcp.call_tool("get_cik_by_ticker", {"ticker": "INVALID"})
+    except Exception as e:
+        print(f"Ticker not found: {e}")
+        # Fallback logic here
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Performance Notes
+
+<Info>
+  This tool implements intelligent caching. After the first lookup, subsequent requests for the same ticker return instantly from cache.
+</Info>
+
+- **First lookup**: ~100-200ms (API call)
+- **Cached lookups**: <1ms
+- **Cache duration**: Session lifetime
+- **Cache size**: All previously queried tickers
+
+## Error Handling
+
+Common errors and solutions:
+
+<Warning>
+  **Invalid Ticker**: If a ticker isn't found, verify it's a publicly traded company with SEC filings. Private companies and many international companies won't have CIK numbers.
+</Warning>
+
+### Error Response Example
+
+```json
+{
+  "error": {
+    "code": "TICKER_NOT_FOUND",
+    "message": "No CIK found for ticker: INVALID",
+    "suggestions": [
+      "Verify the ticker symbol is correct",
+      "Check if the company is publicly traded",
+      "Try the full company name search instead"
+    ]
+  }
+}
+```
+
+## Tips and Best Practices
+
+<Steps>
+  <Step title="Always Get CIK First">
+    Most SEC EDGAR tools require a CIK. Always resolve ticker to CIK before other operations.
+  </Step>
+  
+  <Step title="Handle Ticker Changes">
+    Companies may change tickers (e.g., FB → META). The tool handles common cases, but be aware of recent changes.
+  </Step>
+  
+  <Step title="International Companies">
+    Non-US companies with ADRs have CIKs. Use their US ticker symbol.
+  </Step>
+  
+  <Step title="Store CIKs">
+    For repeated analysis, store CIK mappings to avoid repeated lookups:
+    
+    ```python
+    # Save for later use
+    company_data = {
+        "ticker": "AAPL",
+        "cik": "0000320193",
+        "name": "Apple Inc."
+    }
+    ```
+  </Step>
+</Steps>
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card 
+    title="get_submissions" 
+    icon="list"
+    href="/sec-edgar-mcp-docs/tools/company/get-submissions"
+  >
+    Get filing history using the CIK
+  </Card>
+  <Card 
+    title="get_company_facts" 
+    icon="chart-line"
+    href="/sec-edgar-mcp-docs/tools/company/get-company-facts-summary"
+  >
+    Retrieve financial data using the CIK
+  </Card>
+</CardGroup>
+
+## Complete Example
+
+Here's a complete workflow starting with ticker lookup:
+
+```python
+# 1. Convert ticker to CIK
+cik_result = await mcp.call_tool(
+    "get_cik_by_ticker",
+    {"ticker": "MSFT"}
+)
+
+print(f"Found {cik_result['title']} with CIK {cik_result['cik']}")
+
+# 2. Get recent filings
+filings = await mcp.call_tool(
+    "get_recent_filings_smart",
+    {
+        "cik": cik_result["cik"],
+        "form_type": "10-K",
+        "limit": 1
+    }
+)
+
+# 3. Analyze the filing
+if filings["filings"]:
+    content = await mcp.call_tool(
+        "get_filing_txt_sections",
+        {
+            "url": filings["filings"][0]["txtUrl"],
+            "sections": ["item_1", "item_7"]
+        }
+    )
+```
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

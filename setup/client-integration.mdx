@@ -1,0 +1,398 @@
+---
+title: 'Client Integration'
+description: 'Connect SEC EDGAR MCP to your favorite AI assistant'
+icon: 'plug'
+---
+
+This guide covers how to integrate SEC EDGAR MCP with various MCP-compatible clients.
+
+## Supported Clients
+
+SEC EDGAR MCP works with any MCP-compatible client:
+
+<CardGroup cols={3}>
+  <Card title="Claude Desktop" icon="robot">
+    Official Anthropic desktop app with native MCP support
+  </Card>
+  <Card title="Cline" icon="code">
+    VS Code extension for AI-powered development
+  </Card>
+  <Card title="Continue.dev" icon="terminal">
+    Open-source AI code assistant
+  </Card>
+</CardGroup>
+
+## Claude Desktop
+
+Claude Desktop is Anthropic's official desktop application with built-in MCP support.
+
+### Installation Steps
+
+<Steps>
+  <Step title="Install Claude Desktop">
+    Download from [claude.ai/download](https://claude.ai/download)
+  </Step>
+  
+  <Step title="Locate Configuration File">
+    <Tabs>
+      <Tab title="macOS">
+        ```bash
+        ~/Library/Application Support/Claude/claude_desktop_config.json
+        ```
+      </Tab>
+      <Tab title="Windows">
+        ```bash
+        %APPDATA%\Claude\claude_desktop_config.json
+        ```
+      </Tab>
+      <Tab title="Linux">
+        ```bash
+        ~/.config/Claude/claude_desktop_config.json
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Add SEC EDGAR MCP">
+    Edit the configuration file:
+    
+    ```json
+    {
+      "mcpServers": {
+        "sec-edgar-mcp": {
+          "command": "docker",
+          "args": [
+            "run",
+            "--rm",
+            "-i",
+            "-e",
+            "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+            "stefanoamorelli/sec-edgar-mcp:latest"
+          ]
+        }
+      }
+    }
+    ```
+  </Step>
+  
+  <Step title="Restart Claude Desktop">
+    Completely quit and restart the application for changes to take effect.
+  </Step>
+</Steps>
+
+### Verification
+
+Test the integration with these queries:
+
+```text
+"What is Apple's CIK number?"
+"Show me Tesla's latest 10-K filing"
+"Get Microsoft's quarterly revenue for the last year"
+```
+
+## Cline (VS Code Extension)
+
+Cline is a powerful VS Code extension that brings AI assistance directly into your IDE.
+
+### Installation Steps
+
+<Steps>
+  <Step title="Install Cline Extension">
+    1. Open VS Code
+    2. Go to Extensions (Ctrl+Shift+X)
+    3. Search for "Cline"
+    4. Click Install
+  </Step>
+  
+  <Step title="Configure MCP Servers">
+    Open VS Code settings (Ctrl+,) and search for "cline.mcpServers":
+    
+    ```json
+    {
+      "cline.mcpServers": {
+        "sec-edgar-mcp": {
+          "command": "docker",
+          "args": [
+            "run",
+            "--rm",
+            "-i",
+            "-e",
+            "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+            "stefanoamorelli/sec-edgar-mcp:latest"
+          ]
+        }
+      }
+    }
+    ```
+  </Step>
+  
+  <Step title="Alternative: Local Installation">
+    For local installation with uv:
+    
+    ```json
+    {
+      "cline.mcpServers": {
+        "sec-edgar-mcp": {
+          "command": "uv",
+          "args": ["run", "sec-edgar-mcp"],
+          "cwd": "/path/to/sec-edgar-mcp",
+          "env": {
+            "SEC_EDGAR_USER_AGENT": "Your Name (your.email@domain.com)"
+          }
+        }
+      }
+    }
+    ```
+  </Step>
+  
+  <Step title="Reload VS Code Window">
+    Press Ctrl+Shift+P and run "Developer: Reload Window"
+  </Step>
+</Steps>
+
+### Using with Cline
+
+Open Cline chat (Ctrl+Shift+L) and try:
+
+```text
+Analyze the latest quarterly earnings from Apple's 10-Q filing
+```
+
+## Continue.dev
+
+Continue is an open-source AI code assistant that supports multiple LLMs.
+
+### Installation Steps
+
+<Steps>
+  <Step title="Install Continue">
+    1. Install the VS Code extension
+    2. Or download the standalone app from [continue.dev](https://continue.dev)
+  </Step>
+  
+  <Step title="Open Configuration">
+    Click the gear icon in Continue or edit `~/.continue/config.json`
+  </Step>
+  
+  <Step title="Add MCP Configuration">
+    ```json
+    {
+      "models": [
+        {
+          "title": "Claude 3 with SEC EDGAR",
+          "provider": "anthropic",
+          "model": "claude-3-sonnet-20240229",
+          "apiKey": "YOUR_API_KEY",
+          "mcpServers": {
+            "sec-edgar-mcp": {
+              "command": "docker",
+              "args": [
+                "run",
+                "--rm",
+                "-i",
+                "-e",
+                "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+                "stefanoamorelli/sec-edgar-mcp:latest"
+              ]
+            }
+          }
+        }
+      ]
+    }
+    ```
+  </Step>
+  
+  <Step title="Restart Continue">
+    Restart the Continue extension or application
+  </Step>
+</Steps>
+
+## Advanced Integration Options
+
+### Using with Multiple Clients
+
+You can use SEC EDGAR MCP with multiple clients simultaneously:
+
+<Tabs>
+  <Tab title="Shared Docker Container">
+    Run a single container that multiple clients can connect to:
+    
+    ```bash
+    # Start container with name
+    docker run -d \
+      --name sec-edgar-mcp-server \
+      -e SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)" \
+      stefanoamorelli/sec-edgar-mcp:latest
+    
+    # Connect from clients using docker exec
+    ```
+  </Tab>
+  
+  <Tab title="Separate Instances">
+    Each client runs its own instance:
+    
+    ```json
+    {
+      "mcpServers": {
+        "sec-edgar-mcp": {
+          "command": "docker",
+          "args": ["run", "--rm", "-i", "-e", "SEC_EDGAR_USER_AGENT=...", "stefanoamorelli/sec-edgar-mcp:latest"]
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Custom Client Configuration
+
+For custom MCP clients, implement the connection:
+
+```python
+import subprocess
+import json
+
+# Start the MCP server
+process = subprocess.Popen(
+    ["docker", "run", "--rm", "-i", "-e", "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)", "stefanoamorelli/sec-edgar-mcp:latest"],
+    stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    text=True
+)
+
+# Send JSON-RPC request
+request = {
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+        "name": "get_cik_by_ticker",
+        "arguments": {"ticker": "AAPL"}
+    },
+    "id": 1
+}
+
+process.stdin.write(json.dumps(request) + "\n")
+process.stdin.flush()
+
+# Read response
+response = json.loads(process.stdout.readline())
+```
+
+## Troubleshooting Integration
+
+<AccordionGroup>
+  <Accordion title="MCP server not found" icon="magnifying-glass">
+    **Error**: "MCP server 'sec-edgar-mcp' not found"
+    
+    **Solutions**:
+    1. Verify the server name matches exactly in config
+    2. Check Docker is running: `docker info`
+    3. Test manually: `docker run --rm stefanoamorelli/sec-edgar-mcp:latest --help`
+    4. Check client logs for detailed errors
+  </Accordion>
+  
+  <Accordion title="Connection timeout" icon="clock">
+    **Error**: "Failed to connect to MCP server"
+    
+    **Solutions**:
+    1. Increase client timeout settings
+    2. Check Docker resource limits
+    3. Verify no firewall blocking Docker
+    4. Try with `-i` flag for interactive mode
+  </Accordion>
+  
+  <Accordion title="Authentication errors" icon="key">
+    **Error**: "SEC EDGAR authentication failed"
+    
+    **Solutions**:
+    1. Verify SEC_EDGAR_USER_AGENT format
+    2. Check environment variable is passed correctly
+    3. Test with curl to verify credentials
+    4. Ensure email is valid and active
+  </Accordion>
+  
+  <Accordion title="Tools not appearing" icon="wrench">
+    **Error**: Tools don't show up in client
+    
+    **Solutions**:
+    1. Restart client completely (not just reload)
+    2. Check MCP protocol version compatibility
+    3. Verify server startup logs
+    4. Try listing tools manually:
+       ```json
+       {
+         "jsonrpc": "2.0",
+         "method": "tools/list",
+         "id": 1
+       }
+       ```
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Info>
+  **Performance Tip**: For production use, consider running SEC EDGAR MCP as a persistent service rather than starting a new container for each request.
+</Info>
+
+### Resource Management
+
+```yaml
+# docker-compose.yml for production
+version: '3.8'
+services:
+  sec-edgar-mcp:
+    image: stefanoamorelli/sec-edgar-mcp:latest
+    restart: unless-stopped
+    environment:
+      - SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)
+    mem_limit: 512m
+    cpus: '0.5'
+```
+
+### Monitoring
+
+Enable logging to track usage:
+
+```json
+{
+  "mcpServers": {
+    "sec-edgar-mcp": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)",
+        "-e", "LOG_LEVEL=INFO",
+        "-v", "/var/log/mcp:/logs",
+        "stefanoamorelli/sec-edgar-mcp:latest"
+      ]
+    }
+  }
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="First Query"
+    icon="magnifying-glass"
+    href="/sec-edgar-mcp-docs/usage/first-query"
+  >
+    Make your first SEC EDGAR query
+  </Card>
+  <Card
+    title="MCP Tools Reference"
+    icon="wrench"
+    href="/sec-edgar-mcp-docs/tools/overview"
+  >
+    Explore available tools
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

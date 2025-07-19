@@ -1,0 +1,196 @@
+---
+title: 'Quick Start'
+description: 'Get up and running with SEC EDGAR MCP in 5 minutes'
+icon: 'rocket'
+---
+
+Get SEC EDGAR MCP running with your AI assistant in just a few steps. Choose your preferred installation method below.
+
+<Steps>
+  <Step title="Set up SEC EDGAR User Agent">
+    The SEC requires a user agent string for API access. Set this environment variable:
+    
+    ```bash
+    export SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    ```
+    
+    <Warning>
+      Replace with your actual name and email. The SEC may block requests without a valid user agent.
+    </Warning>
+  </Step>
+  
+  <Step title="Choose Installation Method">
+    <Tabs>
+      <Tab title="Docker (Recommended)">
+        Pull and run the pre-built Docker image:
+        
+        ```bash
+        docker pull stefanoamorelli/sec-edgar-mcp:latest
+        
+        docker run -e SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)" \
+          stefanoamorelli/sec-edgar-mcp:latest
+        ```
+      </Tab>
+      
+      <Tab title="Local Installation">
+        Install using uv package manager:
+        
+        ```bash
+        # Install uv if you haven't already
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        
+        # Clone the repository
+        git clone https://github.com/stefanoamorelli/sec-edgar-mcp.git
+        cd sec-edgar-mcp
+        
+        # Install dependencies
+        uv sync
+        ```
+      </Tab>
+      
+      <Tab title="Conda">
+        Install from Anaconda Cloud:
+        
+        ```bash
+        conda install -c stefanoamorelli sec-edgar-mcp
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Configure Your MCP Client">
+    Add SEC EDGAR MCP to your MCP client configuration:
+    
+    <Tabs>
+      <Tab title="Claude Desktop">
+        Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+        
+        ```json
+        {
+          "mcpServers": {
+            "sec-edgar-mcp": {
+              "command": "docker",
+              "args": ["run", "-e", "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)", "stefanoamorelli/sec-edgar-mcp:latest"],
+              "env": {}
+            }
+          }
+        }
+        ```
+      </Tab>
+      
+      <Tab title="Cline">
+        Add to your VS Code settings:
+        
+        ```json
+        {
+          "cline.mcpServers": {
+            "sec-edgar-mcp": {
+              "command": "uv",
+              "args": ["run", "sec-edgar-mcp"],
+              "env": {
+                "SEC_EDGAR_USER_AGENT": "Your Name (your.email@domain.com)"
+              }
+            }
+          }
+        }
+        ```
+      </Tab>
+      
+      <Tab title="Continue.dev">
+        Add to your Continue configuration:
+        
+        ```json
+        {
+          "models": [
+            {
+              "mcpServers": {
+                "sec-edgar-mcp": {
+                  "command": "docker",
+                  "args": ["run", "-e", "SEC_EDGAR_USER_AGENT=Your Name (your.email@domain.com)", "stefanoamorelli/sec-edgar-mcp:latest"]
+                }
+              }
+            }
+          ]
+        }
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Verify Installation">
+    Restart your MCP client and test with a simple query:
+    
+    ```text
+    "Get Apple's ticker information"
+    ```
+    
+    The assistant should be able to retrieve Apple's CIK number (0000320193).
+  </Step>
+</Steps>
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card
+    title="Installation Guide"
+    icon="download"
+    href="/sec-edgar-mcp-docs/setup/installation"
+  >
+    Detailed installation instructions and troubleshooting
+  </Card>
+  <Card
+    title="Configuration"
+    icon="gear"
+    href="/sec-edgar-mcp-docs/setup/configuration"
+  >
+    Advanced configuration options
+  </Card>
+  <Card
+    title="First Query"
+    icon="magnifying-glass"
+    href="/sec-edgar-mcp-docs/usage/first-query"
+  >
+    Make your first SEC EDGAR query
+  </Card>
+  <Card
+    title="MCP Tools"
+    icon="wrench"
+    href="/sec-edgar-mcp-docs/tools/overview"
+  >
+    Explore available tools
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="SEC_EDGAR_USER_AGENT not set" icon="triangle-exclamation">
+    If you see this error, ensure you've set the environment variable:
+    
+    ```bash
+    export SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    ```
+    
+    For Docker users, pass it with the `-e` flag as shown above.
+  </Accordion>
+  
+  <Accordion title="MCP client doesn't recognize the server" icon="plug">
+    1. Ensure your configuration file is valid JSON
+    2. Check the command path is correct
+    3. Restart your MCP client completely
+    4. Check the client's logs for detailed error messages
+  </Accordion>
+  
+  <Accordion title="Rate limiting errors" icon="clock">
+    The SEC EDGAR API has rate limits. If you encounter errors:
+    - Ensure your user agent is properly formatted
+    - Add delays between requests
+    - Use the caching features for repeated queries
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

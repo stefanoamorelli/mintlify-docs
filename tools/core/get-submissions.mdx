@@ -1,0 +1,318 @@
+---
+title: 'get_submissions'
+description: 'Retrieve complete filing history and company metadata'
+icon: 'folder-open'
+---
+
+The `get_submissions` tool retrieves comprehensive filing history and metadata for a company, including all SEC form submissions, company information, and filing details.
+
+## Function Signature
+
+```typescript
+get_submissions(cik: string) → object
+```
+
+## Parameters
+
+<ParamField path="cik" type="string" required>
+  The 10-digit CIK (Central Index Key) number with leading zeros
+  
+  - Format: "0000320193" (10 digits)
+  - Use `get_cik_by_ticker` to convert from ticker symbol
+</ParamField>
+
+## Returns
+
+<ResponseField name="cik" type="string">
+  The CIK number of the company
+</ResponseField>
+
+<ResponseField name="entityType" type="string">
+  Type of entity (e.g., "operating", "investment")
+</ResponseField>
+
+<ResponseField name="sic" type="string">
+  Standard Industrial Classification code
+</ResponseField>
+
+<ResponseField name="sicDescription" type="string">
+  Description of the company's industry
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Official company name
+</ResponseField>
+
+<ResponseField name="tickers" type="array">
+  List of trading ticker symbols
+</ResponseField>
+
+<ResponseField name="exchanges" type="array">
+  Stock exchanges where the company is listed
+</ResponseField>
+
+<ResponseField name="filings" type="object">
+  Recent filing information including:
+  - `recent`: Most recent filings (up to 1000)
+  - `files`: Array of filing entries with details
+</ResponseField>
+
+## Example Usage
+
+### Basic Usage
+
+```json
+{
+  "tool": "get_submissions",
+  "arguments": {
+    "cik": "0000320193"
+  }
+}
+```
+
+**Response Structure:**
+```json
+{
+  "cik": "0000320193",
+  "entityType": "operating",
+  "sic": "3571",
+  "sicDescription": "Electronic Computers",
+  "name": "Apple Inc.",
+  "tickers": ["AAPL"],
+  "exchanges": ["Nasdaq"],
+  "filings": {
+    "recent": {
+      "accessionNumber": ["0000320193-24-000123", ...],
+      "filingDate": ["2024-11-01", ...],
+      "reportDate": ["2024-09-30", ...],
+      "form": ["10-K", "8-K", "10-Q", ...]
+    }
+  }
+}
+```
+
+## Common Use Cases
+
+<AccordionGroup>
+  <Accordion title="Filing History Analysis" icon="clock">
+    Analyze a company's filing patterns:
+    
+    ```python
+    # Get submissions
+    submissions = await mcp.call_tool(
+        "get_submissions", 
+        {"cik": "0000320193"}
+    )
+    
+    # Count filings by type
+    from collections import Counter
+    filing_counts = Counter(submissions["filings"]["recent"]["form"])
+    
+    print("Filing frequency:")
+    for form_type, count in filing_counts.most_common(10):
+        print(f"{form_type}: {count}")
+    ```
+  </Accordion>
+  
+  <Accordion title="Latest Filing Discovery" icon="sparkles">
+    Find the most recent filing of a specific type:
+    
+    ```python
+    # Get all submissions
+    data = await mcp.call_tool("get_submissions", {"cik": cik})
+    
+    # Find latest 10-K
+    filings = data["filings"]["recent"]
+    for i, form in enumerate(filings["form"]):
+        if form == "10-K":
+            latest_10k = {
+                "accessionNumber": filings["accessionNumber"][i],
+                "filingDate": filings["filingDate"][i],
+                "reportDate": filings["reportDate"][i]
+            }
+            break
+    ```
+  </Accordion>
+  
+  <Accordion title="Company Profile Building" icon="building">
+    Extract complete company profile:
+    
+    ```python
+    # Get submissions
+    company = await mcp.call_tool("get_submissions", {"cik": cik})
+    
+    profile = {
+        "name": company["name"],
+        "tickers": company["tickers"],
+        "exchanges": company["exchanges"],
+        "industry": company["sicDescription"],
+        "sic_code": company["sic"],
+        "total_filings": len(company["filings"]["recent"]["form"]),
+        "entity_type": company["entityType"]
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Understanding the Response
+
+### Filing Arrays
+
+The `filings.recent` object contains parallel arrays where each index represents one filing:
+
+```python
+# Example: Get details of the 5th most recent filing
+idx = 4  # 0-indexed
+filing = {
+    "form": filings["recent"]["form"][idx],
+    "filingDate": filings["recent"]["filingDate"][idx],
+    "accessionNumber": filings["recent"]["accessionNumber"][idx],
+    "reportDate": filings["recent"]["reportDate"][idx],
+    "primaryDocument": filings["recent"]["primaryDocument"][idx]
+}
+```
+
+### Key Filing Types
+
+| Form Type | Description | Frequency |
+|-----------|-------------|-----------|
+| 10-K | Annual report | Yearly |
+| 10-Q | Quarterly report | Quarterly |
+| 8-K | Current report | As needed |
+| DEF 14A | Proxy statement | Yearly |
+| 4 | Insider trading | As occurs |
+
+## Performance Considerations
+
+<Info>
+  The `get_submissions` endpoint returns up to 1000 most recent filings. For companies with extensive filing history, older filings may not be included.
+</Info>
+
+- **Response size**: Can be large (1-5MB) for active filers
+- **Caching**: Results are not cached due to size
+- **Rate limits**: Subject to SEC's 10 requests/second limit
+
+## Advanced Patterns
+
+### Filing Timeline Analysis
+
+```python
+# Analyze filing patterns over time
+import pandas as pd
+
+submissions = await mcp.call_tool("get_submissions", {"cik": cik})
+filings = submissions["filings"]["recent"]
+
+# Create DataFrame
+df = pd.DataFrame({
+    "form": filings["form"],
+    "date": pd.to_datetime(filings["filingDate"])
+})
+
+# Filings by year
+yearly_counts = df.groupby([df['date'].dt.year, 'form']).size()
+```
+
+### Multi-Company Comparison
+
+```python
+# Compare filing activity across companies
+companies = {
+    "AAPL": "0000320193",
+    "MSFT": "0001652044",
+    "GOOGL": "0001018724"
+}
+
+filing_stats = {}
+for ticker, cik in companies.items():
+    data = await mcp.call_tool("get_submissions", {"cik": cik})
+    filing_stats[ticker] = {
+        "total_filings": len(data["filings"]["recent"]["form"]),
+        "name": data["name"],
+        "industry": data["sicDescription"]
+    }
+```
+
+## Error Handling
+
+<Warning>
+  Common errors include invalid CIK formats or non-existent CIKs. Always validate the CIK format before calling.
+</Warning>
+
+### Error Examples
+
+```json
+{
+  "error": {
+    "code": "INVALID_CIK",
+    "message": "CIK must be a 10-digit string with leading zeros"
+  }
+}
+```
+
+```json
+{
+  "error": {
+    "code": "CIK_NOT_FOUND",
+    "message": "No company found for CIK: 0000000000"
+  }
+}
+```
+
+## Best Practices
+
+<Steps>
+  <Step title="Validate CIK Format">
+    Ensure CIK is exactly 10 digits with leading zeros:
+    ```python
+    cik = str(cik_number).zfill(10)  # Pad with zeros
+    ```
+  </Step>
+  
+  <Step title="Handle Large Responses">
+    Process data incrementally for large filers:
+    ```python
+    # Process in chunks
+    chunk_size = 100
+    for i in range(0, len(filings["form"]), chunk_size):
+        chunk = filings["form"][i:i+chunk_size]
+        # Process chunk
+    ```
+  </Step>
+  
+  <Step title="Cache Company Metadata">
+    Store static company info to avoid repeated calls:
+    ```python
+    company_cache[cik] = {
+        "name": data["name"],
+        "tickers": data["tickers"],
+        "sic": data["sic"]
+    }
+    ```
+  </Step>
+</Steps>
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card 
+    title="get_recent_filings_smart" 
+    icon="brain"
+    href="/sec-edgar-mcp-docs/tools/filings/get-recent-filings-smart"
+  >
+    Smart filtering of recent filings
+  </Card>
+  <Card 
+    title="get_filing_txt" 
+    icon="file-lines"
+    href="/sec-edgar-mcp-docs/tools/filings/get-filing-txt"
+  >
+    Retrieve filing content
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

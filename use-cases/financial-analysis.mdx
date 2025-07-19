@@ -1,0 +1,268 @@
+---
+title: 'Financial Analysis'
+description: 'Using SEC EDGAR MCP for comprehensive financial analysis'
+icon: 'chart-line'
+---
+
+<Warning>
+**Important Disclaimer**: EDGAR® and SEC® are trademarks of the U.S. Securities and Exchange Commission. This open-source project is created by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/) and built by the community is not affiliated with or approved by the U.S. Securities and Exchange Commission.
+</Warning>
+
+SEC EDGAR MCP provides powerful tools for financial analysis, enabling deep dives into company performance, trend analysis, and cross-company comparisons.
+
+## Key Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Quarterly Earnings Analysis" icon="chart-bar">
+    Analyze quarterly performance, revenue trends, and earnings quality
+  </Card>
+  <Card title="Ratio Analysis" icon="calculator">
+    Calculate and compare financial ratios across time periods
+  </Card>
+  <Card title="Segment Performance" icon="chart-pie">
+    Break down performance by business segments and geographies
+  </Card>
+  <Card title="Peer Comparison" icon="scale-balanced">
+    Compare metrics across industry peers and competitors
+  </Card>
+</CardGroup>
+
+## Financial Analysis Workflows
+
+### Quarterly Earnings Deep Dive
+
+<Steps>
+  <Step title="Request Analysis">
+    ```text
+    You: "Analyze Apple's latest quarterly earnings performance"
+    ```
+  </Step>
+  
+  <Step title="AI Assistant Response">
+    ```text
+    Assistant: I'll analyze Apple's latest quarterly earnings by examining their most recent 10-Q filing.
+    
+    🔧 Tools used: get_cik_by_ticker, get_submissions, get_company_concepts
+    
+    📊 Key Findings:
+    • Q4 2024 Revenue: $119.58 billion (+6% YoY)
+    • Net Income: $33.92 billion (+11% YoY)
+    • iPhone Revenue: $69.7 billion (+6% YoY)
+    • Services Revenue: $24.2 billion (+12% YoY)
+    • Gross Margin: 46.2% (improved from 45.0% last year)
+    
+    📈 Analysis: Strong performance across all segments with particularly robust Services growth
+    ```
+  </Step>
+  
+  <Step title="Follow-up Query">
+    ```text
+    You: "How does this compare to the same quarter last year?"
+    
+    Assistant: Comparing Q4 2024 vs Q4 2023:
+    
+    🔧 Tools used: get_xbrl_frames, get_company_concepts
+    
+    📊 Year-over-Year Growth:
+    • Total Revenue: +6% ($119.58B vs $113.0B)
+    • iPhone: +6% ($69.7B vs $65.8B)
+    • Mac: +2% ($7.7B vs $7.6B)
+    • iPad: -7% ($6.4B vs $6.9B)
+    • Services: +12% ($24.2B vs $21.6B)
+    • Wearables: +1% ($11.5B vs $11.4B)
+    ```
+  </Step>
+</Steps>
+
+### Financial Ratio Analysis
+
+<Tabs>
+  <Tab title="Profitability Ratios">
+    ```text
+    You: "Calculate Apple's key profitability ratios"
+    
+    Assistant: I'll calculate Apple's profitability ratios using their latest financial data.
+    
+    🔧 Tools used: get_cik_by_ticker, get_company_concepts
+    
+    📊 Profitability Metrics (Q4 2024):
+    • Gross Profit Margin: 46.2%
+    • Operating Margin: 31.5%
+    • Net Profit Margin: 28.4%
+    • Return on Assets (ROA): 33.1%
+    • Return on Equity (ROE): 171.9%
+    
+    💡 Analysis: Exceptionally strong profitability with industry-leading margins
+    ```
+  </Tab>
+  
+  <Tab title="Liquidity Ratios">
+    ```text
+    You: "Analyze Apple's liquidity position"
+    
+    Assistant: Analyzing Apple's liquidity metrics from their latest balance sheet.
+    
+    🔧 Tools used: get_company_concepts, get_filing_txt_sections
+    
+    📊 Liquidity Ratios:
+    • Current Ratio: 0.95
+    • Quick Ratio: 0.91
+    • Cash & Equivalents: $29.9 billion
+    • Working Capital: -$5.2 billion
+    
+    💡 Note: Apple's sub-1 current ratio is typical for their efficient working capital management
+    ```
+  </Tab>
+  
+  <Tab title="Leverage Ratios">
+    ```text
+    You: "What's Apple's debt situation?"
+    
+    Assistant: Examining Apple's leverage and debt metrics.
+    
+    🔧 Tools used: get_company_concepts, get_xbrl_frames
+    
+    📊 Leverage Metrics:
+    • Total Debt: $108.0 billion
+    • Debt-to-Equity: 2.11
+    • Debt-to-Assets: 0.32
+    • Interest Coverage: 41.2x
+    • Net Debt: $78.1 billion
+    
+    💡 Strong debt servicing capability despite high absolute debt levels
+    ```
+  </Tab>
+</Tabs>
+
+### Industry Comparison Analysis
+
+<AccordionGroup>
+  <Accordion title="Tech Giants Comparison" icon="microchip">
+    ```text
+    You: "Compare revenue and profitability across FAANG companies"
+    
+    Assistant: I'll compare key metrics across Facebook (Meta), Apple, Amazon, Netflix, and Google.
+    
+    🔧 Tools used: get_cik_by_ticker (for all companies), get_xbrl_frames
+    
+    📊 FAANG Comparison (Latest Quarter):
+    
+    Revenue (billions):
+    • Apple: $119.6B
+    • Amazon: $170.0B
+    • Google: $88.3B
+    • Meta: $40.6B
+    • Netflix: $9.8B
+    
+    Net Profit Margin:
+    • Apple: 28.4%
+    • Meta: 23.6%
+    • Google: 19.7%
+    • Netflix: 16.0%
+    • Amazon: 7.4%
+    
+    💡 Apple leads in profitability while Amazon dominates revenue
+    ```
+  </Accordion>
+  
+  <Accordion title="Banking Sector Analysis" icon="building-columns">
+    ```text
+    You: "Analyze major US banks' net interest margins"
+    
+    Assistant: Analyzing net interest margins for major US banks.
+    
+    🔧 Tools used: get_cik_by_ticker, get_company_concepts, get_xbrl_frames
+    
+    📊 Q4 2024 Net Interest Margins:
+    • JPMorgan Chase: 2.87%
+    • Bank of America: 2.21%
+    • Wells Fargo: 2.92%
+    • Citigroup: 2.49%
+    
+    🔍 Key Insights:
+    • Wells Fargo shows highest NIM
+    • Rising rate environment benefiting all banks
+    • Average NIM up 15bps YoY
+    ```
+  </Accordion>
+  
+  <Accordion title="Retail Industry Trends" icon="store">
+    ```text
+    You: "Show me retail companies' inventory turnover trends"
+    
+    Assistant: Analyzing inventory efficiency across major retailers.
+    
+    🔧 Tools used: get_company_concepts (multiple companies), get_xbrl_frames
+    
+    📊 Inventory Turnover (Annual):
+    • Walmart: 8.4x (↑ from 8.1x)
+    • Target: 5.9x (↓ from 6.2x)
+    • Costco: 11.8x (↑ from 11.2x)
+    • Home Depot: 4.7x (↓ from 5.1x)
+    
+    📈 Trend: Mixed results with discounters improving efficiency
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Advanced Analysis Techniques
+
+### Time Series Analysis
+
+```text
+You: "Show me Apple's revenue trend over the past 5 years with quarterly data"
+Assistant: Analyzing risk factors from Apple's latest 10-K filing.
+
+🔧 Tools used: get_cik_by_ticker, get_submissions, get_filing_txt_sections
+
+📊 Key Risk Categories Identified:
+• Supply chain dependencies (China manufacturing)
+• Regulatory compliance and privacy laws
+• Intense competition in tech markets
+• Foreign exchange rate fluctuations
+• Intellectual property protection
+• Cybersecurity and data privacy
+
+⚠️ Top Concerns:
+• 90% of manufacturing in China creates geopolitical risk
+• New EU and US privacy regulations affecting data use
+• Competition from Samsung, Google in mobile markets
+```
+
+## Best Practices
+
+<Info>
+  For accurate financial analysis, always verify data against official filings and consider using multiple data points for confirmation.
+</Info>
+
+<Steps>
+  <Step title="Data Validation">
+    Cross-reference calculated ratios with published financial statements
+  </Step>
+  
+  <Step title="Peer Selection">
+    Choose appropriate industry peers with similar business models
+  </Step>
+  
+  <Step title="Time Period Consistency">
+    Ensure all comparison data uses the same reporting periods
+  </Step>
+  
+  <Step title="Contextual Analysis">
+    Consider macroeconomic factors and industry-specific trends
+  </Step>
+</Steps>
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools" href="/tools/overview">
+    Explore all available MCP tools for SEC data analysis
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

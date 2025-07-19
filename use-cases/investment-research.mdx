@@ -1,0 +1,402 @@
+---
+title: 'Investment Research'
+description: 'Using SEC EDGAR MCP for comprehensive investment research and due diligence'
+icon: 'chart-mixed'
+---
+
+<Warning>
+**Important Disclaimer**: EDGAR® and SEC® are trademarks of the U.S. Securities and Exchange Commission. This open-source project is created by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/) and built by the community is not affiliated with or approved by the U.S. Securities and Exchange Commission.
+</Warning>
+
+SEC EDGAR MCP provides investment professionals with powerful tools for conducting thorough due diligence, screening investments, and monitoring portfolio companies.
+
+## Investment Research Workflows
+
+<CardGroup cols={2}>
+  <Card title="Due Diligence" icon="magnifying-glass">
+    Comprehensive company analysis for investment decisions
+  </Card>
+  <Card title="Screening" icon="filter">
+    Identify investment opportunities across markets
+  </Card>
+  <Card title="Monitoring" icon="chart-line">
+    Track portfolio company performance and risks
+  </Card>
+  <Card title="ESG Analysis" icon="leaf">
+    Evaluate environmental, social, and governance factors
+  </Card>
+</CardGroup>
+
+## Due Diligence Process
+
+### Initial Company Assessment
+
+<Steps>
+  <Step title="Company Overview">
+    ```text
+    You: "Give me a comprehensive overview of NVIDIA's business model and recent performance"
+    
+    Assistant: I'll analyze NVIDIA's business and recent performance using their latest SEC filings.
+    
+    🔧 Tools used: get_cik_by_ticker, get_submissions, get_filing_txt_sections, get_company_concepts
+    
+    🏢 Business Overview:
+    • Primary: Graphics processing units (GPUs) and system-on-chip units
+    • Key Markets: Gaming, Data Center, Professional Visualization, Automotive
+    • AI/ML Leadership: Dominant position in AI training and inference
+    
+    📊 Recent Performance (Q4 2024):
+    • Revenue: $60.9B (+22% YoY)
+    • Data Center Revenue: $47.5B (+27% YoY)
+    • Gaming Revenue: $10.4B (+15% YoY)
+    • Net Income: $32.9B (+581% YoY)
+    
+    💡 Investment Thesis: Leading AI infrastructure provider with strong moat
+    ```
+  </Step>
+  
+  <Step title="Financial Health Check">
+    ```text
+    You: "Analyze NVIDIA's financial health and key ratios"
+    
+    Assistant: I'll perform a comprehensive financial health check on NVIDIA.
+    
+    🔧 Tools used: get_company_concepts, get_xbrl_frames
+    
+    📊 Financial Health Metrics:
+    • Total Assets: $96.0B
+    • Total Liabilities: $27.1B
+    • Stockholders' Equity: $68.9B
+    • Cash & Equivalents: $34.8B
+    
+    📈 Key Ratios:
+    • Debt-to-Equity: 0.39 (very low leverage)
+    • Return on Equity: 47.7% (exceptional)
+    • Current Ratio: 4.17 (strong liquidity)
+    • Quick Ratio: 3.64 (excellent)
+    
+    ✅ Financial Health: Excellent - Strong balance sheet with minimal debt
+    ```
+  </Step>
+  
+  <Step title="Growth Analysis">
+    ```text
+    You: "Show me NVIDIA's revenue growth trend over the past 3 years"
+    
+    Assistant: I'll analyze NVIDIA's revenue growth trajectory over the past 3 years.
+    
+    🔧 Tools used: get_company_concepts, get_filing_txt_sections
+    
+    📈 3-Year Revenue Trend:
+    • FY 2022: $26.9B
+    • FY 2023: $27.0B (+0.4%)
+    • FY 2024: $60.9B (+126%)
+    
+    🚀 Growth Metrics:
+    • 3-Year CAGR: 31.3%
+    • Last 12 months: +126% YoY
+    • Data Center growth: +279% YoY
+    • Gaming segment: +15% YoY
+    
+    💡 Key Driver: AI boom driving unprecedented data center demand
+    ```
+  </Step>
+</Steps>
+
+### Risk Assessment
+
+<Tabs>
+  <Tab title="Business Risks">
+    ```text
+    You: "What are the key risk factors for NVIDIA according to their latest 10-K?"
+    
+    Assistant: I'll extract and analyze key risk factors from NVIDIA's latest annual report.
+    
+    🔧 Tools used: get_submissions, get_filing_txt_sections
+    
+    ⚠️ Top Risk Factors:
+    
+    🔄 Competition & Technology:
+    • Intense competition from AMD, Intel in GPU/AI chips
+    • Rapid technology changes requiring constant innovation
+    • Customer concentration risk (major cloud providers)
+    
+    🌐 Geopolitical:
+    • Export restrictions to China (significant revenue impact)
+    • Taiwan manufacturing dependency (TSMC)
+    • Supply chain vulnerabilities
+    
+    💼 Market & Economic:
+    • Cryptocurrency mining demand volatility
+    • Economic downturn impact on data center spending
+    • Inventory and demand planning challenges
+    ```
+  </Tab>
+  
+  <Tab title="Financial Risks">
+    ```text
+    You: "Analyze NVIDIA's financial risks including debt and cash flow stability"
+    
+    Assistant: I'll examine NVIDIA's financial risk profile focusing on debt and cash flows.
+    
+    🔧 Tools used: get_company_concepts, get_xbrl_frames
+    
+    💰 Debt Profile:
+    • Total Long-term Debt: $8.5B
+    • Debt maturity: Well-laddered through 2060
+    • Interest coverage: 89.5x (exceptional)
+    • Net Cash Position: $26.3B
+    
+    💸 Cash Flow Analysis (TTM):
+    • Operating Cash Flow: $48.7B
+    • Free Cash Flow: $46.9B
+    • FCF Margin: 77% (industry-leading)
+    • Cash Flow growth: +461% YoY
+    
+    ✅ Financial Risk: Low - Strong cash generation, minimal debt burden
+    ```
+  </Tab>
+  
+  <Tab title="Operational Risks">
+    ```text
+    You: "Evaluate NVIDIA's operational efficiency and R&D investments"
+    
+    Assistant: I'll analyze NVIDIA's operational metrics and efficiency indicators.
+    
+    🔧 Tools used: get_company_concepts, get_filing_txt
+    
+    🏭 Operational Metrics:
+    • Employees: 29,600 (+19% YoY)
+    • R&D Expense: $8.7B (14.3% of revenue)
+    • CapEx: $1.8B (3.0% of revenue)
+    • Revenue per Employee: $2.06M
+    
+    📈 Efficiency Trends:
+    • R&D intensity stable despite revenue surge
+    • Operating leverage improving significantly
+    • Gross margins expanding (73% -> 75%)
+    
+    ⚠️ Key Risks:
+    • Talent retention in competitive market
+    • Manufacturing capacity constraints
+    • Need for continuous innovation investment
+    ```
+  </Tab>
+</Tabs>
+
+## Investment Screening
+
+### Value Screening
+
+<AccordionGroup>
+  <Accordion title="P/E Ratio Screening" icon="percentage">
+    ```text
+    You: "Screen tech companies by P/E ratio to find value opportunities"
+    
+    Assistant: I'll screen major tech companies using earnings data to identify valuation opportunities.
+    
+    🔧 Tools used: get_xbrl_frames, get_company_concepts
+    
+    📊 Tech Sector P/E Analysis (Q3 2024 EPS):
+    • Apple: P/E 31.2 (EPS: $6.08)
+    • Microsoft: P/E 35.8 (EPS: $11.05)
+    • Google: P/E 23.7 (EPS: $7.50)
+    • Meta: P/E 26.4 (EPS: $17.49)
+    • NVIDIA: P/E 65.2 (EPS: $19.82)
+    
+    💡 Value Opportunities:
+    • Google: Lowest P/E despite strong AI position
+    • Meta: Below sector average with high FCF
+    • Intel: P/E 18.5 (turnaround play)
+    ```
+  </Accordion>
+  
+  <Accordion title="Book Value Analysis" icon="book">
+    ```text
+    You: "Find companies trading below book value in the financial sector"
+    
+    Assistant: I'll screen financial sector companies for book value opportunities.
+    
+    🔧 Tools used: get_xbrl_frames, get_company_concepts
+    
+    🏛️ Financial Sector P/B Ratios:
+    • Bank of America: 1.05x (near book value)
+    • Citigroup: 0.68x (trading below book)
+    • Wells Fargo: 1.12x
+    • Goldman Sachs: 1.24x
+    • Morgan Stanley: 1.89x
+    
+    💡 Value Opportunities:
+    • Citigroup: 32% discount to book value
+    • Tangible book multiple even more attractive
+    • Consider regulatory overhang and ROE trends
+    ```
+  </Accordion>
+  
+  <Accordion title="Dividend Analysis" icon="dollar-sign">
+    ```text
+    You: "Analyze dividend aristocrats for sustainable yield and growth"
+    
+    Assistant: I'll analyze established dividend-paying companies for income investors.
+    
+    🔧 Tools used: get_company_concepts, get_xbrl_frames
+    
+    💵 Dividend Aristocrats Analysis:
+    
+    Johnson & Johnson:
+    • Yield: 2.9%
+    • 5-year growth: 5.6% CAGR
+    • Payout ratio: 44%
+    • 62 consecutive years of increases
+    
+    Coca-Cola:
+    • Yield: 3.1%
+    • 5-year growth: 3.3% CAGR
+    • Payout ratio: 68%
+    • 61 consecutive years
+    
+    💡 Best Risk/Reward: JNJ - Lower payout ratio, healthcare stability
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Growth Screening
+
+```text
+You: "Find high-growth companies with revenue growth above 20% year-over-year"
+    ```python
+    # Governance analysis from proxy statements
+    governance_sections = await mcp.call_tool(
+        "get_filing_txt_sections",
+        url=proxy_url,
+        sections=["executive_compensation", "board_composition"]
+    )
+    
+    # Look for governance best practices
+    governance_keywords = [
+        "independent", "board", "audit", "compensation",
+        "oversight", "ethics", "compliance"
+    ]
+    ```
+  </Tab>
+</Tabs>
+
+## Investment Thesis Development
+
+### Sector Analysis
+
+```python
+# Compare company within its sector
+sector_companies = {
+    "AAPL": "0000320193",
+    "MSFT": "0000789019",
+    "GOOGL": "0001652044"
+}
+
+# Get sector-wide metrics
+sector_metrics = await mcp.call_tool(
+    "get_xbrl_frames",
+    taxonomy="us-gaap",
+    concept="Revenues",
+    period="2024Q3",
+    unit="USD"
+)
+
+# Calculate sector averages and rankings
+```
+
+### Competitive Analysis
+
+```python
+# Compare key competitors
+competitive_metrics = [
+    "Revenues", "NetIncomeLoss", "ResearchAndDevelopmentExpense",
+    "MarketingExpense", "TotalAssets"
+]
+
+for metric in competitive_metrics:
+    comparison_data = await mcp.call_tool(
+        "get_xbrl_frames",
+        taxonomy="us-gaap",
+        concept=metric,
+        period="2024Q3",
+        unit="USD"
+    )
+    
+    # Analyze competitive positioning
+```
+
+## Risk Management
+
+### Diversification Analysis
+
+```python
+# Analyze portfolio sector concentration
+portfolio_sectors = {}
+for ticker in portfolio_companies:
+    company_data = await mcp.call_tool(
+        "get_submissions",
+        cik=ticker_to_cik[ticker]
+    )
+    
+    sic_code = company_data["sic"]
+    portfolio_sectors[ticker] = sic_code
+
+# Check for concentration risk
+```
+
+### Stress Testing
+
+```python
+# Analyze performance during economic downturns
+stress_periods = ["2020Q1", "2020Q2", "2008Q4", "2009Q1"]
+
+for period in stress_periods:
+    stress_performance = await mcp.call_tool(
+        "get_xbrl_frames",
+        taxonomy="us-gaap",
+        concept="NetIncomeLoss",
+        period=period,
+        unit="USD"
+    )
+    
+    # Analyze resilience during stress periods
+```
+
+## Best Practices
+
+<Info>
+  Investment research requires combining quantitative analysis with qualitative insights from SEC filings.
+</Info>
+
+<Steps>
+  <Step title="Multiple Data Points">
+    Use various financial metrics and ratios for comprehensive analysis
+  </Step>
+  
+  <Step title="Time Series Analysis">
+    Look at trends over multiple years, not just single periods
+  </Step>
+  
+  <Step title="Peer Comparison">
+    Always compare companies within the same industry
+  </Step>
+  
+  <Step title="Qualitative Analysis">
+    Read management commentary and risk factors carefully
+  </Step>
+</Steps>
+
+## Related Tools
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools" href="/tools/overview">
+    Explore all available MCP tools for investment research
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

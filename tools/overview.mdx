@@ -1,0 +1,225 @@
+---
+title: 'Tools Overview'
+description: 'Complete reference for all SEC EDGAR MCP tools'
+icon: 'wrench'
+---
+
+SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC financial data. Each tool is designed for specific use cases and data types based on the actual GitHub repository.
+
+## Available Tools
+
+<Tabs>
+  <Tab title="Core Tools" icon="gear">
+    Essential tools for company data and financial concepts:
+    
+    **get_cik_by_ticker**
+    Convert ticker symbols to CIK numbers
+    
+    **get_submissions**
+    Get company filing history and metadata
+    
+    **get_company_concepts**
+    Retrieve specific financial concepts for companies
+    
+    **get_xbrl_frames**
+    Query XBRL frames across companies and time periods
+  </Tab>
+  
+  <Tab title="Filing Tools" icon="file-lines">
+    Tools for accessing and processing SEC filings:
+    
+    **get_filing_txt**
+    Get filing content in text format
+    
+    **get_filing_txt_sections**
+    Extract specific sections from filings
+    
+    **stream_filing_txt_chunks**
+    Stream large filings in manageable chunks
+  </Tab>
+</Tabs>
+
+## Quick Reference Table
+
+| Tool Name | Category | Primary Use Case | LLM Query Example |
+|-----------|----------|------------------|-------------------|
+| `get_cik_by_ticker` | Core | Convert ticker → CIK | "What is Apple's CIK number?" |
+| `get_submissions` | Core | Filing history | "Show me Microsoft's recent filings" |
+| `get_company_concepts` | Core | Financial concepts | "Get Tesla's revenue for the last 4 quarters" |
+| `get_xbrl_frames` | Core | Cross-company analysis | "Compare tech companies' R&D spending in 2024" |
+| `get_filing_txt` | Filings | Full text content | "Get the full content of Apple's latest 10-K" |
+| `get_filing_txt_sections` | Filings | Section extraction | "Extract the risk factors from Microsoft's 10-K" |
+| `stream_filing_txt_chunks` | Filings | Large file streaming | "Process Amazon's annual report in chunks" |
+
+## Common Workflows
+
+<AccordionGroup>
+  <Accordion title="Company Analysis Workflow" icon="play">
+    **LLM Query**: "Analyze Apple's financial performance"
+    
+    **Tools Used**:
+    1. `get_cik_by_ticker` - Convert AAPL to CIK
+    2. `get_submissions` - Get recent filings
+    3. `get_company_concepts` - Extract financial metrics
+    4. `get_filing_txt_sections` - Get MD&A analysis
+  </Accordion>
+  
+  <Accordion title="Industry Comparison" icon="scale-balanced">
+    **LLM Query**: "Compare revenue growth across FAANG companies"
+    
+    **Tools Used**:
+    1. `get_cik_by_ticker` - Convert all tickers to CIKs
+    2. `get_xbrl_frames` - Get revenue data for all companies
+    3. `get_company_concepts` - Get historical revenue trends
+  </Accordion>
+  
+  <Accordion title="Document Processing" icon="file-search">
+    **LLM Query**: "Extract business risks from tech companies' 10-K filings"
+    
+    **Tools Used**:
+    1. `get_submissions` - Find latest 10-K filings
+    2. `get_filing_txt_sections` - Extract risk factor sections
+    3. `stream_filing_txt_chunks` - Process large documents efficiently
+  </Accordion>
+</AccordionGroup>
+
+## Tool Selection Guide
+
+<Info>
+  Choose the right tool based on your specific needs. Each tool is optimized for different types of queries and data access patterns.
+</Info>
+
+### By Data Type
+
+<Tabs>
+  <Tab title="Company Identification">
+    **Use Case**: Converting tickers to CIKs or getting company info
+    
+    **Tool**: `get_cik_by_ticker`
+    
+    **Example Query**: "What is Tesla's CIK number?"
+  </Tab>
+  
+  <Tab title="Financial Metrics">
+    **Use Case**: Getting specific financial data points
+    
+    **Tool**: `get_company_concepts`
+    
+    **Example Query**: "Show me Apple's quarterly revenue for 2024"
+  </Tab>
+  
+  <Tab title="Cross-Company Analysis">
+    **Use Case**: Comparing metrics across multiple companies
+    
+    **Tool**: `get_xbrl_frames`
+    
+    **Example Query**: "Compare the profit margins of tech giants"
+  </Tab>
+  
+  <Tab title="Document Content">
+    **Use Case**: Accessing filing text and sections
+    
+    **Tools**: `get_filing_txt`, `get_filing_txt_sections`, `stream_filing_txt_chunks`
+    
+    **Example Query**: "Get the business description from Microsoft's latest 10-K"
+  </Tab>
+</Tabs>
+
+## Query Examples
+
+### Financial Analysis Queries
+
+<CardGroup cols={2}>
+  <Card title="Revenue Analysis">
+    **Query**: "What was Amazon's revenue growth last quarter?"
+    
+    **Tools**: get_cik_by_ticker → get_company_concepts
+  </Card>
+  
+  <Card title="Profitability Comparison">
+    **Query**: "Compare the profit margins of Apple and Microsoft"
+    
+    **Tools**: get_cik_by_ticker → get_xbrl_frames
+  </Card>
+  
+  <Card title="Trend Analysis">
+    **Query**: "Show me Google's R&D spending trend over 3 years"
+    
+    **Tools**: get_cik_by_ticker → get_company_concepts
+  </Card>
+  
+  <Card title="Filing Analysis">
+    **Query**: "What are the main risk factors in Tesla's latest 10-K?"
+    
+    **Tools**: get_cik_by_ticker → get_submissions → get_filing_txt_sections
+  </Card>
+</CardGroup>
+
+## Performance Tips
+
+<Steps>
+  <Step title="Use Appropriate Tools">
+    Choose the most specific tool for your needs. Use `get_company_concepts` for specific metrics rather than processing full filings.
+  </Step>
+  
+  <Step title="Batch Queries">
+    When analyzing multiple companies, use `get_xbrl_frames` for efficient cross-company queries.
+  </Step>
+  
+  <Step title="Stream Large Files">
+    For large filings (>5MB), use `stream_filing_txt_chunks` to avoid memory issues.
+  </Step>
+  
+  <Step title="Cache Results">
+    The tools implement intelligent caching for ticker-to-CIK mappings and frequently accessed data.
+  </Step>
+</Steps>
+
+## Error Handling
+
+All tools include robust error handling with descriptive messages:
+
+```json
+{
+  "error": {
+    "code": "COMPANY_NOT_FOUND",
+    "message": "No company found for ticker: INVALID",
+    "suggestions": [
+      "Verify the ticker symbol is correct",
+      "Check if the company is publicly traded",
+      "Try using the full company name"
+    ]
+  }
+}
+```
+
+Common error types:
+- `COMPANY_NOT_FOUND` - Invalid ticker or CIK
+- `CONCEPT_NOT_FOUND` - Unknown financial concept
+- `FILING_NOT_AVAILABLE` - Requested filing doesn't exist
+- `RATE_LIMIT_EXCEEDED` - Too many requests to SEC API
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="See Usage Examples"
+    icon="code"
+    href="/usage/examples"
+  >
+    Learn through practical examples
+  </Card>
+  <Card
+    title="Try First Query"
+    icon="play"
+    href="/usage/first-query"
+  >
+    Get started with your first query
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

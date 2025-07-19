@@ -1,0 +1,486 @@
+---
+title: 'Contributing'
+description: 'How to contribute to SEC EDGAR MCP'
+icon: 'users'
+---
+
+We welcome contributions to SEC EDGAR MCP! This guide will help you get started with contributing code, documentation, bug reports, and feature requests.
+
+## Ways to Contribute
+
+<CardGroup cols={2}>
+  <Card title="Code Contributions" icon="code">
+    Fix bugs, add features, or improve performance
+  </Card>
+  <Card title="Documentation" icon="book">
+    Improve docs, add examples, or fix typos
+  </Card>
+  <Card title="Bug Reports" icon="bug">
+    Report issues or unexpected behavior
+  </Card>
+  <Card title="Feature Requests" icon="lightbulb">
+    Suggest new tools or improvements
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+### Development Environment Setup
+
+<Steps>
+  <Step title="Fork and Clone">
+    ```bash
+    # Fork the repository on GitHub
+    git clone https://github.com/YOUR_USERNAME/sec-edgar-mcp.git
+    cd sec-edgar-mcp
+    ```
+  </Step>
+  
+  <Step title="Set Up Development Environment">
+    ```bash
+    # Install UV package manager
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    
+    # Install dependencies
+    uv sync
+    
+    # Set up environment variables
+    export SEC_EDGAR_USER_AGENT="Your Name (your.email@domain.com)"
+    export PYTHONPATH=$(pwd):$PYTHONPATH
+    ```
+  </Step>
+  
+  <Step title="Install Pre-commit Hooks">
+    ```bash
+    # Install pre-commit hooks for code quality
+    uv run pre-commit install
+    
+    # Run hooks on all files (optional)
+    uv run pre-commit run --all-files
+    ```
+  </Step>
+  
+  <Step title="Verify Installation">
+    ```bash
+    # Test the installation
+    uv run python -m sec_edgar_mcp.server --help
+    
+    # Run tests
+    uv run pytest
+    ```
+  </Step>
+</Steps>
+
+### Development Workflow
+
+<Tabs>
+  <Tab title="Feature Development">
+    1. **Create a branch**:
+       ```bash
+       git checkout -b feature/your-feature-name
+       ```
+    
+    2. **Make changes** following our coding standards
+    
+    3. **Test your changes**:
+       ```bash
+       # Run tests
+       uv run pytest
+       
+       # Run type checking
+       uv run mypy sec_edgar_mcp/
+       
+       # Run linting
+       uv run ruff check sec_edgar_mcp/
+       ```
+    
+    4. **Commit and push**:
+       ```bash
+       git add .
+       git commit -m "feat: add new feature description"
+       git push origin feature/your-feature-name
+       ```
+    
+    5. **Open a Pull Request** on GitHub
+  </Tab>
+  
+  <Tab title="Bug Fixes">
+    1. **Create a branch**:
+       ```bash
+       git checkout -b fix/issue-description
+       ```
+    
+    2. **Reproduce the bug** and write a test
+    
+    3. **Fix the issue** with minimal changes
+    
+    4. **Verify the fix**:
+       ```bash
+       # Run all tests
+       uv run pytest
+       
+       # Test specific functionality
+       uv run python -m sec_edgar_mcp.server
+       ```
+    
+    5. **Submit PR** with clear description
+  </Tab>
+  
+  <Tab title="Documentation">
+    1. **Edit documentation** in `/docs` or docstrings
+    
+    2. **Preview changes** locally if possible
+    
+    3. **Check for typos**:
+       ```bash
+       # Use spell checker
+       codespell sec_edgar_mcp/ docs/
+       ```
+    
+    4. **Submit PR** with documentation updates
+  </Tab>
+</Tabs>
+
+## Code Guidelines
+
+### Python Code Style
+
+We use strict code quality tools:
+
+<AccordionGroup>
+  <Accordion title="Ruff for Linting" icon="broom">
+    ```bash
+    # Check code style
+    uv run ruff check sec_edgar_mcp/
+    
+    # Auto-fix issues
+    uv run ruff check --fix sec_edgar_mcp/
+    
+    # Format code
+    uv run ruff format sec_edgar_mcp/
+    ```
+    
+    Configuration in `pyproject.toml`:
+    ```toml
+    [tool.ruff]
+    line-length = 88
+    target-version = "py311"
+    ```
+  </Accordion>
+  
+  <Accordion title="Type Checking with MyPy" icon="check-double">
+    ```bash
+    # Check types
+    uv run mypy sec_edgar_mcp/
+    ```
+    
+    Requirements:
+    - All functions must have type hints
+    - Use `typing` module for complex types
+    - Return types must be specified
+    
+    ```python
+    from typing import Dict, List, Optional
+    
+    def get_company_data(cik: str) -> Dict[str, Any]:
+        """Get company data with proper typing."""
+        return {"cik": cik, "name": "Example"}
+    ```
+  </Accordion>
+  
+  <Accordion title="Testing with Pytest" icon="flask">
+    ```bash
+    # Run all tests
+    uv run pytest
+    
+    # Run specific test file
+    uv run pytest tests/test_server.py
+    
+    # Run with coverage
+    uv run pytest --cov=sec_edgar_mcp
+    ```
+    
+    Test requirements:
+    - Write tests for all new functions
+    - Use descriptive test names
+    - Mock external API calls
+    - Test error conditions
+  </Accordion>
+</AccordionGroup>
+
+### Code Structure
+
+Follow these patterns:
+
+```python
+# Good: Clear function with docstring and types
+async def get_filing_content(url: str, timeout: int = 30) -> Dict[str, Any]:
+    """
+    Retrieve filing content from SEC EDGAR.
+    
+    Args:
+        url: The SEC EDGAR filing URL
+        timeout: Request timeout in seconds
+        
+    Returns:
+        Dictionary containing filing content and metadata
+        
+    Raises:
+        ValueError: If URL is invalid
+        requests.RequestException: If request fails
+    """
+    if not url.startswith("https://www.sec.gov/"):
+        raise ValueError("Invalid SEC EDGAR URL")
+    
+    # Implementation here
+    
+# Bad: No types, no docstring
+def get_filing(url):
+    return requests.get(url).json()
+```
+
+## Adding New Tools
+
+When adding new MCP tools:
+
+<Steps>
+  <Step title="Plan the Tool">
+    - Define the tool's purpose
+    - Specify input parameters
+    - Design the output format
+    - Consider error cases
+  </Step>
+  
+  <Step title="Implement the Tool">
+    ```python
+    @app.tool()
+    async def new_tool_name(
+        param1: str,
+        param2: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """
+        Tool description for documentation.
+        
+        Args:
+            param1: Description of first parameter
+            param2: Optional second parameter
+            
+        Returns:
+            Dictionary with tool results
+        """
+        # Validate inputs
+        if not param1:
+            raise ValueError("param1 is required")
+        
+        # Implementation
+        result = await some_async_operation(param1, param2)
+        
+        return {
+            "tool": "new_tool_name",
+            "result": result,
+            "metadata": {
+                "timestamp": datetime.now().isoformat(),
+                "version": "1.0"
+            }
+        }
+    ```
+  </Step>
+  
+  <Step title="Add Tests">
+    ```python
+    import pytest
+    from unittest.mock import AsyncMock, patch
+    
+    @pytest.mark.asyncio
+    async def test_new_tool_name():
+        """Test the new tool functionality."""
+        # Mock external dependencies
+        with patch('sec_edgar_mcp.server.some_async_operation') as mock_op:
+            mock_op.return_value = {"data": "test"}
+            
+            # Test the tool
+            result = await new_tool_name("test_param")
+            
+            # Assertions
+            assert result["tool"] == "new_tool_name"
+            assert result["result"]["data"] == "test"
+            mock_op.assert_called_once_with("test_param", None)
+    ```
+  </Step>
+  
+  <Step title="Update Documentation">
+    - Add tool to README.md
+    - Create usage examples
+    - Update tool count in documentation
+  </Step>
+</Steps>
+
+## Pull Request Process
+
+### PR Requirements
+
+<Checklist>
+  <Check>All tests pass</Check>
+  <Check>Code follows style guidelines</Check>
+  <Check>Type checking passes</Check>
+  <Check>Documentation is updated</Check>
+  <Check>Commit messages follow convention</Check>
+  <Check>PR description is clear</Check>
+</Checklist>
+
+### Commit Message Convention
+
+We follow conventional commits:
+
+```bash
+# Types: feat, fix, docs, style, refactor, test, chore
+git commit -m "feat: add support for Form 13F parsing"
+git commit -m "fix: handle missing CIK in submissions"
+git commit -m "docs: update installation instructions"
+git commit -m "test: add tests for XBRL parsing"
+```
+
+### PR Template
+
+Use this template for pull requests:
+
+```markdown
+## Description
+Brief description of what this PR does.
+
+## Changes
+- [ ] Add new feature X
+- [ ] Fix bug Y
+- [ ] Update documentation
+
+## Testing
+- [ ] All existing tests pass
+- [ ] New tests added for changes
+- [ ] Manual testing completed
+
+## Checklist
+- [ ] Code follows project style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] Breaking changes documented
+```
+
+## Issue Reporting
+
+### Bug Reports
+
+Use the bug report template:
+
+```markdown
+**Bug Description**
+Clear description of what the bug is.
+
+**Reproduction Steps**
+1. Call tool with parameters...
+2. See error...
+
+**Expected Behavior**
+What should happen instead.
+
+**Environment**
+- SEC EDGAR MCP version:
+- Python version:
+- Operating system:
+- MCP client:
+
+**Additional Context**
+Any other relevant information.
+```
+
+### Feature Requests
+
+Use the feature request template:
+
+```markdown
+**Feature Description**
+Clear description of the proposed feature.
+
+**Use Case**
+Why would this feature be valuable?
+
+**Proposed Solution**
+How do you envision this working?
+
+**Alternatives**
+Any alternative approaches considered?
+```
+
+## Community Guidelines
+
+### Code of Conduct
+
+We are committed to providing a welcoming and inclusive environment:
+
+- **Be respectful** in all interactions
+- **Be collaborative** and help others
+- **Be professional** in communications
+- **Be inclusive** and welcoming to newcomers
+
+### Getting Help
+
+<CardGroup cols={2}>
+  <Card title="Discord Community" icon="discord">
+    Join our Discord for real-time help and discussions
+  </Card>
+  <Card title="GitHub Discussions" icon="comments">
+    Use GitHub Discussions for longer-form questions
+  </Card>
+  <Card title="Documentation" icon="book">
+    Check the docs before asking questions
+  </Card>
+  <Card title="Stack Overflow" icon="stack-overflow">
+    Tag questions with `sec-edgar-mcp`
+  </Card>
+</CardGroup>
+
+## Recognition
+
+Contributors are recognized in several ways:
+
+- **README contributors section**
+- **Release notes mentions**
+- **Community highlights**
+- **Maintainer opportunities** for regular contributors
+
+## Release Process
+
+For maintainers:
+
+<Steps>
+  <Step title="Prepare Release">
+    - Update version in `pyproject.toml`
+    - Update CHANGELOG.md
+    - Run full test suite
+  </Step>
+  
+  <Step title="Create Release">
+    ```bash
+    # Tag the release
+    git tag v1.2.3
+    git push origin v1.2.3
+    
+    # Build and publish
+    uv build
+    uv publish
+    ```
+  </Step>
+  
+  <Step title="Post-Release">
+    - Update documentation
+    - Announce on social media
+    - Close resolved issues
+  </Step>
+</Steps>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+
+Thank you for contributing to SEC EDGAR MCP! Your contributions help make financial data more accessible to everyone.
+</Note>

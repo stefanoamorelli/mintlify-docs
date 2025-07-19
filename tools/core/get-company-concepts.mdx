@@ -1,0 +1,66 @@
+---
+title: 'get_company_concepts'
+description: 'Retrieve financial concept data for specific companies'
+icon: 'chart-bar'
+---
+
+The `get_company_concepts` tool retrieves financial concept data for specified companies from the SEC EDGAR database, providing access to structured financial information across different time periods.
+
+## Function Signature
+
+```typescript
+get_company_concepts(lookups: array, concept_name: string, user_agent?: string) → object
+```
+
+## Parameters
+
+<ParamField path="lookups" type="array" required>
+  Array of company identifiers (tickers or CIKs) to retrieve data for
+  
+  - Accepts ticker symbols: ["AAPL", "MSFT"]
+  - Accepts CIK numbers: ["0000320193", "0000789019"]
+  - Mixed formats allowed: ["AAPL", "0000789019"]
+</ParamField>
+
+<ParamField path="concept_name" type="string" required>
+  The financial concept to retrieve (XBRL concept name)
+  
+  - Common concepts: "Revenues", "NetIncomeLoss", "Assets", "Liabilities"
+  - US-GAAP taxonomy concepts supported
+  - Case-sensitive naming
+</ParamField>
+
+<ParamField path="user_agent" type="string">
+  Custom user agent string for SEC API requests
+  
+  - Optional if SEC_EDGAR_USER_AGENT environment variable is set
+  - Format: "Your Name (your.email@domain.com)"
+</ParamField>
+
+## Returns
+
+<ResponseField name="concept_name" type="string">
+  The requested financial concept name
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of company data, each containing:
+  - `cik`: Company CIK number
+  - `ticker`: Company ticker symbol
+  - `title`: Official company name
+  - `concept_data`: Financial data for the requested concept
+</ResponseField>
+
+<ResponseField name="metadata" type="object">
+  Query metadata including:
+  - `request_time`: Time taken to process the request
+  - `companies_found`: Number of companies with data
+  - `concept_description`: Description of the financial concept
+</ResponseField>
+
+## Example Usage
+
+### Basic Revenue Query
+
+```text
+You: "Show me the revenue for Apple, Microsoft, and Google for the last year"

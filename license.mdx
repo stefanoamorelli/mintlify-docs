@@ -1,0 +1,189 @@
+---
+title: 'License'
+description: 'License information for SEC EDGAR MCP'
+icon: 'scale-balanced'
+---
+
+SEC EDGAR MCP is released under the MIT License, which allows for both commercial and non-commercial use with minimal restrictions.
+
+## MIT License
+
+```text
+MIT License
+
+Copyright (c) 2024 [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## What This Means
+
+<AccordionGroup>
+  <Accordion title="Permissions" icon="check">
+    You are free to:
+    - ✅ Use the software for any purpose
+    - ✅ Modify the source code
+    - ✅ Distribute copies of the software
+    - ✅ Distribute modified versions
+    - ✅ Use in commercial applications
+    - ✅ Use in proprietary software
+  </Accordion>
+  
+  <Accordion title="Conditions" icon="info">
+    You must:
+    - 📋 Include the original copyright notice
+    - 📋 Include the MIT license text
+    - 📋 Include these in all copies or substantial portions
+  </Accordion>
+  
+  <Accordion title="Limitations" icon="x">
+    The software:
+    - ❌ Comes with no warranty
+    - ❌ Authors are not liable for damages
+    - ❌ No guarantee of fitness for purpose
+  </Accordion>
+</AccordionGroup>
+
+## Dependencies
+
+SEC EDGAR MCP depends on several open-source libraries, each with their own licenses:
+
+| Package | License | Usage |
+|---------|---------|-------|
+| `mcp[cli]` | MIT | Model Context Protocol framework |
+| `secedgar` | MIT | SEC EDGAR data access |
+| `beautifulsoup4` | MIT | HTML parsing |
+| `requests` | Apache 2.0 | HTTP requests |
+| `pandas` | BSD-3-Clause | Data manipulation (optional) |
+
+<Info>
+  All dependencies are compatible with the MIT License and allow for both commercial and non-commercial use.
+</Info>
+
+## Data Usage
+
+While SEC EDGAR MCP is open-source, please be aware of data usage restrictions:
+
+<Warning>
+  **SEC EDGAR Data**: The data accessed through this tool is provided by the U.S. Securities and Exchange Commission. Users must comply with SEC terms of use and provide proper attribution when using SEC data.
+</Warning>
+
+### SEC EDGAR Terms
+
+- Provide a valid User-Agent header with contact information
+- Respect rate limits (10 requests per second maximum)
+- Use data in accordance with SEC guidelines
+- Do not abuse the SEC EDGAR system
+
+### Data Attribution
+
+When using SEC EDGAR data in your applications or research, please include:
+
+```text
+Data provided by the U.S. Securities and Exchange Commission (SEC) 
+through the EDGAR database. Accessed via SEC EDGAR MCP.
+```
+
+## Contributing
+
+By contributing to SEC EDGAR MCP, you agree that your contributions will be licensed under the same MIT License. This includes:
+
+- Code contributions
+- Documentation improvements
+- Bug fixes
+- Feature additions
+
+## Support
+
+<Card title="No Warranty" icon="shield-exclamation">
+  SEC EDGAR MCP is provided "as is" without warranty of any kind. While we strive to maintain high quality and reliability, users are responsible for evaluating the software's suitability for their specific needs.
+</Card>
+
+For support and questions:
+
+<CardGroup cols={2}>
+  <Card title="Community Support" icon="users">
+    - GitHub Issues for bug reports
+    - GitHub Discussions for questions
+    - Community Discord for real-time help
+  </Card>
+  <Card title="Professional Support" icon="briefcase">
+    - Commercial support available
+    - Custom development services
+    - Enterprise licensing options
+  </Card>
+</CardGroup>
+
+## License History
+
+- **v1.0.0+**: MIT License
+- **Initial Release**: MIT License (no changes)
+
+## Related Licenses
+
+If you're building on top of SEC EDGAR MCP, consider these license-compatible options:
+
+<AccordionGroup>
+  <Accordion title="MIT License" icon="balance-scale">
+    **Best for**: Maximum compatibility and flexibility
+    - Same license as SEC EDGAR MCP
+    - No restrictions on commercial use
+    - Compatible with any other license
+  </Accordion>
+  
+  <Accordion title="Apache 2.0" icon="apache">
+    **Best for**: Patent protection and attribution
+    - Compatible with MIT
+    - Provides patent grant
+    - Requires attribution
+  </Accordion>
+  
+  <Accordion title="BSD-3-Clause" icon="building">
+    **Best for**: Academic and research use
+    - Compatible with MIT
+    - Similar to MIT with endorsement clause
+    - Popular in academic software
+  </Accordion>
+</AccordionGroup>
+
+## Questions?
+
+If you have questions about licensing:
+
+<Steps>
+  <Step title="Check the FAQ">
+    Review common licensing questions in our documentation
+  </Step>
+  
+  <Step title="Search Issues">
+    Check if your question has been asked before
+  </Step>
+  
+  <Step title="Contact Us">
+    Reach out via GitHub Issues or email for specific licensing questions
+  </Step>
+</Steps>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+
+**Disclaimer**: This is not legal advice. Consult with a lawyer for specific legal questions about licensing.
+</Note>

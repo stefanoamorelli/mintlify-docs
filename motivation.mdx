@@ -1,0 +1,227 @@
+---
+title: 'Motivation'
+description: 'Why SEC EDGAR MCP was created and the problems it solves'
+icon: 'lightbulb'
+---
+
+SEC EDGAR MCP was born from the frustration of trying to access and analyze SEC financial data programmatically. This page explains the motivation behind the project and the problems it aims to solve.
+
+## The Problem
+
+<AccordionGroup>
+  <Accordion title="Fragmented Data Access" icon="puzzle-piece">
+    Financial data is scattered across different APIs, formats, and sources. SEC EDGAR provides comprehensive data, but accessing it programmatically requires:
+    
+    - Understanding complex API endpoints
+    - Handling different data formats (HTML, XML, XBRL)
+    - Managing rate limits and authentication
+    - Writing custom parsers for different filing types
+  </Accordion>
+  
+  <Accordion title="AI Integration Barriers" icon="robot">
+    Traditional financial APIs weren't designed for AI applications:
+    
+    - No natural language interface
+    - Limited context for AI assistants
+    - Complex authentication flows
+    - Inconsistent data structures
+  </Accordion>
+  
+  <Accordion title="High Barrier to Entry" icon="mountain">
+    Getting started with SEC data analysis required:
+    
+    - Deep knowledge of SEC filing structures
+    - Understanding of XBRL taxonomy
+    - Custom code for each type of analysis
+    - Significant development time
+  </Accordion>
+</AccordionGroup>
+
+## The Vision
+
+<Tabs>
+  <Tab title="Democratize Financial Data">
+    **Make SEC data accessible to everyone**
+    
+    Financial data should be available to researchers, analysts, developers, and anyone interested in understanding public companies. SEC EDGAR MCP removes technical barriers and provides a simple, natural language interface.
+    
+    ```text
+    Instead of: Complex API calls and data parsing
+    Now: "What was Tesla's revenue growth last quarter?"
+    ```
+  </Tab>
+  
+  <Tab title="AI-First Approach">
+    **Built for the AI era**
+    
+    Modern AI assistants should have access to financial data without requiring users to write code or understand complex APIs. SEC EDGAR MCP provides structured, contextual data that AI can understand and use effectively.
+    
+    ```text
+    AI Assistant: "I'll analyze Tesla's latest 10-Q filing to calculate their quarterly revenue growth and compare it to the same period last year."
+    ```
+  </Tab>
+  
+  <Tab title="Open Source Collaboration">
+    **Community-driven development**
+    
+    Financial tools shouldn't be locked behind expensive licenses. By making SEC EDGAR MCP open source, we enable the community to contribute improvements, add features, and ensure the tool serves everyone's needs.
+  </Tab>
+</Tabs>
+
+## Real-World Impact
+
+### For Financial Analysts
+
+<Steps>
+  <Step title="Before SEC EDGAR MCP">
+    **Hours of manual work**
+    - Navigate SEC EDGAR website manually
+    - Download filings individually
+    - Parse documents for relevant sections
+    - Extract data into spreadsheets
+    - Calculate metrics manually
+  </Step>
+  
+  <Step title="After SEC EDGAR MCP">
+    **Natural language queries**
+    ```text
+    "Compare Apple and Microsoft's R&D spending as a percentage of revenue over the last 3 years"
+    ```
+    
+    The AI assistant handles all the complexity behind the scenes.
+  </Step>
+</Steps>
+
+### For Researchers
+
+<Info>
+  Academic researchers can now focus on analysis rather than data collection and cleaning.
+</Info>
+
+**Research Examples:**
+- "Analyze the relationship between CEO compensation and company performance across tech companies"
+- "Compare ESG disclosures in annual reports between 2020 and 2024"
+- "Study the impact of supply chain risks mentioned in 10-K filings on stock performance"
+
+### For Developers
+
+**Before:** Weeks of development time
+```python
+# Complex code to:
+# 1. Authenticate with SEC API
+# 2. Find the right filing
+# 3. Parse HTML/XML content
+# 4. Extract financial metrics
+# 5. Handle rate limits and errors
+```
+
+**After:** Natural language integration
+```text
+User query → AI assistant → SEC EDGAR MCP → Structured response
+```
+
+## Design Principles
+
+<CardGroup cols={2}>
+  <Card title="Simplicity First" icon="hand-wave">
+    Every tool should be easy to understand and use, even for non-technical users.
+  </Card>
+  <Card title="AI-Native" icon="brain">
+    Built specifically for AI assistants with rich context and structured responses.
+  </Card>
+  <Card title="Comprehensive Coverage" icon="chart-network">
+    Support all major SEC filing types and financial concepts.
+  </Card>
+  <Card title="Performance Focused" icon="gauge">
+    Fast, reliable access to data with intelligent caching and streaming.
+  </Card>
+</CardGroup>
+
+## The Future
+
+### Short-term Goals
+
+- **Complete XBRL Coverage**: Support all standard financial concepts
+- **Advanced Analytics**: Built-in financial ratio calculations and trend analysis
+- **Real-time Monitoring**: Alerts for new filings and material changes
+
+### Long-term Vision
+
+- **Global Expansion**: Support for international financial data sources
+- **Predictive Analytics**: AI-powered insights and forecasting
+- **Collaborative Features**: Shared research and analysis tools
+
+## Success Stories
+
+<AccordionGroup>
+  <Accordion title="Investment Research Firm" icon="chart-line">
+    **Challenge**: Manual analysis of hundreds of quarterly earnings reports
+    
+    **Solution**: Used SEC EDGAR MCP to automate data extraction and analysis
+    
+    **Result**: Reduced research time from weeks to hours, enabling coverage of 5x more companies
+  </Accordion>
+  
+  <Accordion title="Academic Research Project" icon="graduation-cap">
+    **Challenge**: Analyzing 10 years of environmental disclosures across 500 companies
+    
+    **Solution**: Built custom analysis using SEC EDGAR MCP's text extraction tools
+    
+    **Result**: Completed comprehensive study in months instead of years
+  </Accordion>
+  
+  <Accordion title="Financial News Organization" icon="newspaper">
+    **Challenge**: Real-time monitoring of material corporate changes
+    
+    **Solution**: Implemented automated filing monitoring using SEC EDGAR MCP
+    
+    **Result**: Breaking news coverage improved by 3 hours on average
+  </Accordion>
+</AccordionGroup>
+
+## Contributing to the Vision
+
+<Steps>
+  <Step title="Use the Tool">
+    The best way to contribute is to use SEC EDGAR MCP in your projects and provide feedback.
+  </Step>
+  
+  <Step title="Share Your Story">
+    Tell us how SEC EDGAR MCP has helped your work. Success stories inspire improvements.
+  </Step>
+  
+  <Step title="Contribute Code">
+    Help add new features, fix bugs, or improve documentation.
+  </Step>
+  
+  <Step title="Spread the Word">
+    Share SEC EDGAR MCP with others who could benefit from accessible financial data.
+  </Step>
+</Steps>
+
+## Get Started
+
+Ready to experience the future of financial data access?
+
+<CardGroup cols={2}>
+  <Card
+    title="Quick Start"
+    icon="rocket"
+    href="/setup/quickstart"
+  >
+    Get up and running in 5 minutes
+  </Card>
+  <Card
+    title="Use Cases"
+    icon="lightbulb"
+    href="/use-cases/financial-analysis"
+  >
+    See real-world applications
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>

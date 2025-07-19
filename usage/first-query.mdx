@@ -1,0 +1,285 @@
+---
+title: 'Your First Query'
+description: 'Step-by-step guide to making your first SEC EDGAR query'
+icon: 'play'
+---
+
+This guide walks you through making your first SEC EDGAR query, from setup to analyzing real financial data.
+
+## Before You Begin
+
+<Check>
+  Make sure you have:
+  - SEC EDGAR MCP installed and configured
+  - Your SEC_EDGAR_USER_AGENT environment variable set
+  - An MCP client connected to SEC EDGAR MCP
+</Check>
+
+## Step 1: Test the Connection
+
+Start with a simple query to verify everything is working:
+
+<Tabs>
+  <Tab title="Natural Language">
+    In your AI assistant, type:
+    ```text
+    What is Apple's CIK number?
+    ```
+    
+    Expected response:
+    ```text
+    Apple's CIK number is 0000320193
+    ```
+  </Tab>
+  
+  <Tab title="Direct Tool Call">
+    ```json
+    {
+      "tool": "get_cik_by_ticker",
+      "arguments": {
+        "ticker": "AAPL"
+      }
+    }
+    ```
+    
+    Expected response:
+    ```json
+    {
+      "cik": "0000320193",
+      "ticker": "AAPL",
+      "title": "Apple Inc."
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Step 2: Get Company Information
+
+Now let's get more detailed company information:
+
+```text
+Show me Apple's recent filing history
+```
+
+The assistant will:
+1. Use `get_cik_by_ticker` to get Apple's CIK
+2. Call `get_submissions` to retrieve filing history
+3. Present a summary of recent filings
+
+You should see information about:
+- Recent 10-K (annual reports)
+- 10-Q (quarterly reports)
+- 8-K (current reports)
+- Other SEC filings
+
+## Step 3: Retrieve a Specific Filing
+
+Let's get Apple's latest annual report:
+
+```text
+Get me Apple's most recent 10-K filing and show me the business description
+```
+
+<Info>
+  The assistant will use multiple tools in sequence:
+  1. `get_cik_by_ticker` - Get CIK
+  2. `get_recent_filings_smart` - Find latest 10-K
+  3. `get_filing_txt_sections` - Extract business section
+</Info>
+
+## Step 4: Analyze Financial Data
+
+Now for some financial analysis:
+
+```text
+What was Apple's revenue for the last 4 quarters?
+```
+
+The assistant will use `get_specific_concept_values` to retrieve quarterly revenue data and present it in an easy-to-read format.
+
+## Step 5: Compare Financial Metrics
+
+Let's do a year-over-year comparison:
+
+```text
+Compare Apple's net income between 2023 and 2024
+```
+
+This will trigger the `compare_concept_periods` tool to show:
+- 2023 net income
+- 2024 net income
+- Percentage change
+- Analysis of the trend
+
+## Complete Example Workflow
+
+Here's a complete analysis workflow you can try:
+
+<Steps>
+  <Step title="Company Overview">
+    ```text
+    Give me an overview of Microsoft including their business segments
+    ```
+  </Step>
+  
+  <Step title="Financial Performance">
+    ```text
+    Show me Microsoft's revenue and profit margins for the last year
+    ```
+  </Step>
+  
+  <Step title="Segment Analysis">
+    ```text
+    Break down Microsoft's revenue by business segment
+    ```
+  </Step>
+  
+  <Step title="Recent News">
+    ```text
+    What recent 8-K filings has Microsoft made?
+    ```
+  </Step>
+</Steps>
+
+## Understanding Tool Responses
+
+When the assistant uses SEC EDGAR MCP tools, you'll see structured data like:
+
+### Company Data Example
+```json
+{
+  "name": "Apple Inc.",
+  "cik": "0000320193",
+  "tickers": ["AAPL"],
+  "sic": "3571",
+  "sicDescription": "Electronic Computers"
+}
+```
+
+### Financial Data Example
+```json
+{
+  "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+  "values": [
+    {
+      "value": 119575000000,
+      "period": {
+        "endDate": "2024-09-30",
+        "months": 3
+      },
+      "form": "10-Q"
+    }
+  ]
+}
+```
+
+## Common Queries to Try
+
+<AccordionGroup>
+  <Accordion title="Financial Metrics" icon="chart-line">
+    - "What is Tesla's current cash position?"
+    - "Show me Amazon's gross profit margin trend"
+    - "Compare Google and Meta's advertising revenue"
+    - "What are Apple's operating expenses?"
+  </Accordion>
+  
+  <Accordion title="Filing Analysis" icon="file-search">
+    - "Get the risk factors from Microsoft's latest 10-K"
+    - "Show me the MD&A section from Tesla's recent 10-Q"
+    - "Find Netflix's business strategy from their annual report"
+    - "Extract the financial statements from Apple's 10-K"
+  </Accordion>
+  
+  <Accordion title="Company Comparisons" icon="scale-balanced">
+    - "Compare the revenue growth of FAANG companies"
+    - "Which tech company has the highest profit margin?"
+    - "Show me automotive companies' R&D spending"
+    - "Compare retail companies' inventory turnover"
+  </Accordion>
+  
+  <Accordion title="Time-Based Analysis" icon="clock">
+    - "Show me Nvidia's revenue growth over the last 2 years"
+    - "How has Amazon's employee count changed?"
+    - "Track Apple's stock buybacks over time"
+    - "Show quarterly earnings trends for Microsoft"
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting Your First Query
+
+<Warning>
+  If your queries aren't working, check these common issues:
+</Warning>
+
+### Query Not Returning Data
+
+1. **Check the ticker symbol**: Ensure you're using the correct NYSE/NASDAQ ticker
+2. **Verify the company is public**: Private companies don't file with SEC
+3. **Check the filing type**: Not all companies file all form types
+
+### Rate Limiting
+
+If you see rate limit errors:
+- Wait 10 seconds between requests
+- Reduce the number of concurrent queries
+- Check your SEC_EDGAR_USER_AGENT is properly set
+
+### No Financial Data
+
+Some companies may not report standard XBRL concepts:
+- Try different concept names
+- Check if the company uses custom concepts
+- Look at the actual filing to verify data exists
+
+## Tips for Effective Queries
+
+<Steps>
+  <Step title="Be Specific">
+    Instead of "Show me Apple's financials", try:
+    "Show me Apple's quarterly revenue for the last year"
+  </Step>
+  
+  <Step title="Use Time Frames">
+    Specify periods for better results:
+    "Get Tesla's Q3 2024 earnings" vs "Get Tesla's earnings"
+  </Step>
+  
+  <Step title="Combine Analyses">
+    Ask for multiple related items:
+    "Compare Apple and Samsung's revenue and show me their profit margins"
+  </Step>
+  
+  <Step title="Iterate and Refine">
+    Start broad, then drill down:
+    1. "Show me Microsoft's segments"
+    2. "Give me more detail on the Azure segment"
+    3. "How fast is Azure growing year-over-year?"
+  </Step>
+</Steps>
+
+## What's Next?
+
+Now that you've made your first queries:
+
+<CardGroup cols={2}>
+  <Card
+    title="Explore Examples"
+    icon="flask"
+    href="/usage/examples"
+  >
+    See advanced usage examples
+  </Card>
+  <Card
+    title="Tool Reference"
+    icon="wrench"
+    href="/tools/overview"
+  >
+    Learn about all available tools
+  </Card>
+</CardGroup>
+
+---
+
+<Note>
+Created and maintained by [Stefano Amorelli](https://www.linkedin.com/in/stefanoamorelli/). Built together with the community.
+</Note>
