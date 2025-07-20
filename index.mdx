@@ -14,7 +14,7 @@ icon: 'chart-line'
   style={{ borderRadius: '0.5rem' }}
 />
 
-SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provides AI assistants with seamless access to SEC EDGAR (Electronic Data Gathering, Analysis, and Retrieval) financial data. Query company filings, extract financial metrics, analyze business segments, and process XBRL data—all through natural language.
+SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provides AI assistants with seamless access to SEC EDGAR (Electronic Data Gathering, Analysis, and Retrieval) financial data. Query company filings, extract financial metrics, analyze business segments, and process XBRL data - all through natural language.
 
 <CardGroup cols={2}>
   <Card
@@ -65,6 +65,10 @@ SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provide
   <Accordion title="XBRL Data Support" icon="code">
     Query XBRL frames across multiple entities and time periods. Discover company-specific XBRL concepts and parse XML filings including Forms 3, 4, and 5.
   </Accordion>
+  
+  <Accordion title="Insider Trading Analysis" icon="users">
+    Track insider transactions, ownership changes, and trading patterns. Analyze Forms 3, 4, and 5 filings with comprehensive insider trading tools and complex analysis capabilities.
+  </Accordion>
 </AccordionGroup>
 
 ## Why SEC EDGAR MCP?
@@ -72,23 +76,23 @@ SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provide
 <Tabs>
   <Tab title="For Developers">
     - **MCP Protocol**: Built on the standardized Model Context Protocol
-    - **Type-Safe**: Full type hints and validation for all tools
-    - **Extensible**: Easy to add new tools and functionality
+    - **Type-Safe**: Full type hints and validation for all 21 tools
+    - **Extensible**: Modular architecture with core utilities and caching
     - **Well-Documented**: Comprehensive documentation with examples
   </Tab>
   
   <Tab title="For Financial Analysts">
     - **Natural Language**: Query financial data using plain English
     - **Real-Time Data**: Access the latest SEC filings as they're published
-    - **Smart Recommendations**: Get tool suggestions based on filing types
-    - **Segment Analysis**: Deep dive into business segment performance
+    - **Insider Analysis**: Track insider trading patterns and ownership changes
+    - **Comprehensive Coverage**: 21 specialized tools for every financial use case
   </Tab>
   
   <Tab title="For AI Applications">
     - **Context-Aware**: Provides rich financial context to AI assistants
     - **Streaming Support**: Handle large documents efficiently
     - **Error Handling**: Robust error handling and fallback mechanisms
-    - **Caching**: Intelligent caching for improved performance
+    - **Enhanced Caching**: Intelligent ticker caching and performance optimization
   </Tab>
 </Tabs>
 
@@ -97,11 +101,11 @@ SEC EDGAR MCP is an open-source Model Context Protocol (MCP) server that provide
 Here's how easy it is to get started:
 
 ```text
-You: "What was Apple's revenue in the last quarter?"
-Assistant: I'll use the get_cik_by_ticker tool to find Apple's CIK, then get_company_concepts to retrieve their latest revenue data.
+You: "Show me recent insider trading activity for Apple executives"
+Assistant: I'll search for Apple's company information and then analyze recent insider transactions using our comprehensive insider trading tools.
 
-🔧 Tools used: get_cik_by_ticker, get_company_concepts
-📊 Result: Apple's Q4 2024 revenue was $119.58 billion, up 6% year-over-year
+🔧 Tools used: company_search, get_insider_transactions, analyze_insider_patterns
+📊 Result: Found 12 insider transactions in the last 30 days, including 3 executive stock sales totaling $2.1M
 ```
 
 ## Prerequisites

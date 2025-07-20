@@ -4,52 +4,133 @@ description: 'Complete reference for all SEC EDGAR MCP tools'
 icon: 'wrench'
 ---
 
-SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC financial data. Each tool is designed for specific use cases and data types based on the actual GitHub repository.
+SEC EDGAR MCP provides 21 specialized tools for accessing and analyzing SEC financial data. Each tool is designed for specific use cases and data types based on the actual GitHub repository.
 
 ## Available Tools
 
 <Tabs>
-  <Tab title="Core Tools" icon="gear">
-    Essential tools for company data and financial concepts:
+  <Tab title="Company Tools" icon="building">
+    **4 tools** for company identification and basic information:
     
-    **get_cik_by_ticker**
-    Convert ticker symbols to CIK numbers
-    
-    **get_submissions**
-    Get company filing history and metadata
-    
-    **get_company_concepts**
-    Retrieve specific financial concepts for companies
-    
-    **get_xbrl_frames**
-    Query XBRL frames across companies and time periods
+    - `get_cik_by_ticker` - Convert ticker symbols to CIK numbers
+    - `get_company_info` - Get basic company information 
+    - `search_companies` - Search companies by name
+    - `get_company_facts` - Get company facts and data
   </Tab>
   
   <Tab title="Filing Tools" icon="file-lines">
-    Tools for accessing and processing SEC filings:
+    **4 tools** for accessing and processing SEC filings:
     
-    **get_filing_txt**
-    Get filing content in text format
+    - `get_recent_filings` - Get recent company filings
+    - `get_filing_content` - Get full filing content
+    - `analyze_8k` - Analyze 8-K filings specifically
+    - `get_filing_sections` - Extract specific sections from filings
+  </Tab>
+  
+  <Tab title="Financial Tools" icon="chart-line">
+    **7 tools** for financial data analysis and metrics:
     
-    **get_filing_txt_sections**
-    Extract specific sections from filings
+    - `get_financials` - Get financial statement data
+    - `get_segment_data` - Get business segment information
+    - `get_key_metrics` - Get key financial metrics
+    - `compare_periods` - Compare financial data across periods
+    - `discover_company_metrics` - Discover available metrics
+    - `get_xbrl_concepts` - Get XBRL concept data
+    - `discover_xbrl_concepts` - Discover available XBRL concepts
+  </Tab>
+  
+  <Tab title="Insider Tools" icon="users">
+    **5 tools** for insider trading and ownership analysis:
     
-    **stream_filing_txt_chunks**
-    Stream large filings in manageable chunks
+    - `get_insider_transactions` - Get insider transaction data
+    - `get_insider_summary` - Get insider trading summary
+    - `get_form4_details` - Get detailed Form 4 information
+    - `analyze_form4_transactions` - Analyze Form 4 transactions
+    - `analyze_insider_sentiment` - Analyze insider sentiment patterns
+  </Tab>
+  
+  <Tab title="Utility Tools" icon="gear">
+    **1 tool** for enhanced functionality:
+    
+    - `get_recommended_tools` - Get smart tool recommendations based on queries
   </Tab>
 </Tabs>
 
-## Quick Reference Table
+## Tool Categories Overview
 
-| Tool Name | Category | Primary Use Case | LLM Query Example |
-|-----------|----------|------------------|-------------------|
-| `get_cik_by_ticker` | Core | Convert ticker → CIK | "What is Apple's CIK number?" |
-| `get_submissions` | Core | Filing history | "Show me Microsoft's recent filings" |
-| `get_company_concepts` | Core | Financial concepts | "Get Tesla's revenue for the last 4 quarters" |
-| `get_xbrl_frames` | Core | Cross-company analysis | "Compare tech companies' R&D spending in 2024" |
-| `get_filing_txt` | Filings | Full text content | "Get the full content of Apple's latest 10-K" |
-| `get_filing_txt_sections` | Filings | Section extraction | "Extract the risk factors from Microsoft's 10-K" |
-| `stream_filing_txt_chunks` | Filings | Large file streaming | "Process Amazon's annual report in chunks" |
+The 21 tools are organized into five main categories:
+
+<CardGroup cols={2}>
+  <Card title="Company Tools" icon="building">
+    **4 tools** for company identification and search
+    - Company search by name/ticker
+    - CIK lookup and company information
+  </Card>
+  <Card title="Filing Tools" icon="file-lines">
+    **4 tools** for SEC filing access and processing
+    - Full text content and section extraction
+    - 8-K analysis and filing processing
+  </Card>
+  <Card title="Financial Tools" icon="chart-line">
+    **7 tools** for financial data and analysis
+    - Financial statements and metrics
+    - XBRL data and segment analysis
+  </Card>
+  <Card title="Insider Tools" icon="users">
+    **5 tools** for insider trading analysis
+    - Transaction data and Form 4 analysis
+    - Insider sentiment and pattern analysis
+  </Card>
+  <Card title="Utility Tools" icon="gear">
+    **1 tool** for enhanced functionality
+    - Smart tool recommendations
+  </Card>
+</CardGroup>
+
+## Complete Tool Reference
+
+All 21 SEC EDGAR MCP tools organized by category:
+
+### Company Tools (4 tools)
+| Tool Name | Primary Use Case | LLM Query Example |
+|-----------|------------------|-------------------|
+| `get_cik_by_ticker` | Convert ticker → CIK | "What is Apple's CIK number?" |
+| `get_company_info` | Get basic company info | "Tell me about Apple Inc." |
+| `search_companies` | Find companies by name | "Find all companies with 'Apple' in the name" |
+| `get_company_facts` | Get company facts/data | "Get basic facts about Microsoft" |
+
+### Filing Tools (4 tools)
+| Tool Name | Primary Use Case | LLM Query Example |
+|-----------|------------------|-------------------|
+| `get_recent_filings` | Get recent filings | "Show me Tesla's recent SEC filings" |
+| `get_filing_content` | Get full filing text | "Get the full content of Apple's latest 10-K" |
+| `analyze_8k` | Analyze 8-K filings | "Analyze Microsoft's recent 8-K filing" |
+| `get_filing_sections` | Extract filing sections | "Extract risk factors from Tesla's 10-K" |
+
+### Financial Tools (7 tools)
+| Tool Name | Primary Use Case | LLM Query Example |
+|-----------|------------------|-------------------|
+| `get_financials` | Get financial statements | "Get Apple's financial statements for Q4 2024" |
+| `get_segment_data` | Business segment info | "Show me Apple's revenue by business segment" |
+| `get_key_metrics` | Key financial metrics | "What are Tesla's key financial metrics?" |
+| `compare_periods` | Period comparison | "Compare Apple's Q4 2024 vs Q4 2023 revenue" |
+| `discover_company_metrics` | Available metrics | "What financial metrics are available for Microsoft?" |
+| `get_xbrl_concepts` | XBRL concept data | "Get revenue XBRL data for Apple" |
+| `discover_xbrl_concepts` | Available XBRL concepts | "What XBRL concepts are available for Tesla?" |
+
+### Insider Trading Tools (5 tools)
+| Tool Name | Primary Use Case | LLM Query Example |
+|-----------|------------------|-------------------|
+| `get_insider_transactions` | Insider transaction data | "Show recent insider transactions for Apple" |
+| `get_insider_summary` | Insider trading summary | "Summarize insider activity for Tesla executives" |
+| `get_form4_details` | Detailed Form 4 info | "Get details of Microsoft's latest Form 4 filings" |
+| `analyze_form4_transactions` | Form 4 analysis | "Analyze Apple's recent Form 4 transactions" |
+| `analyze_insider_sentiment` | Insider sentiment analysis | "Analyze insider sentiment for tech executives" |
+
+### Utility Tools (1 tool)
+| Tool Name | Primary Use Case | LLM Query Example |
+|-----------|------------------|-------------------|
+| `get_recommended_tools` | Smart tool suggestions | "What tools should I use to analyze Apple's performance?" |
 
 ## Common Workflows
 
@@ -59,9 +140,9 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
     
     **Tools Used**:
     1. `get_cik_by_ticker` - Convert AAPL to CIK
-    2. `get_submissions` - Get recent filings
-    3. `get_company_concepts` - Extract financial metrics
-    4. `get_filing_txt_sections` - Get MD&A analysis
+    2. `get_recent_filings` - Get recent filings
+    3. `get_financials` - Extract financial statements
+    4. `get_filing_sections` - Get MD&A analysis
   </Accordion>
   
   <Accordion title="Industry Comparison" icon="scale-balanced">
@@ -69,17 +150,26 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
     
     **Tools Used**:
     1. `get_cik_by_ticker` - Convert all tickers to CIKs
-    2. `get_xbrl_frames` - Get revenue data for all companies
-    3. `get_company_concepts` - Get historical revenue trends
+    2. `get_xbrl_concepts` - Get revenue data for all companies
+    3. `compare_periods` - Compare revenue trends across periods
   </Accordion>
   
   <Accordion title="Document Processing" icon="file-search">
     **LLM Query**: "Extract business risks from tech companies' 10-K filings"
     
     **Tools Used**:
-    1. `get_submissions` - Find latest 10-K filings
-    2. `get_filing_txt_sections` - Extract risk factor sections
-    3. `stream_filing_txt_chunks` - Process large documents efficiently
+    1. `get_recent_filings` - Find latest 10-K filings
+    2. `get_filing_sections` - Extract risk factor sections
+    3. `get_filing_content` - Process large documents efficiently
+  </Accordion>
+  
+  <Accordion title="Insider Trading Analysis" icon="users">
+    **LLM Query**: "Analyze insider trading patterns for Apple executives"
+    
+    **Tools Used**:
+    1. `search_companies` - Find Apple's company information
+    2. `get_insider_transactions` - Get recent insider transactions
+    3. `analyze_insider_sentiment` - Perform advanced pattern analysis
   </Accordion>
 </AccordionGroup>
 
@@ -103,7 +193,7 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
   <Tab title="Financial Metrics">
     **Use Case**: Getting specific financial data points
     
-    **Tool**: `get_company_concepts`
+    **Tool**: `get_financials`
     
     **Example Query**: "Show me Apple's quarterly revenue for 2024"
   </Tab>
@@ -111,7 +201,7 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
   <Tab title="Cross-Company Analysis">
     **Use Case**: Comparing metrics across multiple companies
     
-    **Tool**: `get_xbrl_frames`
+    **Tool**: `compare_periods`
     
     **Example Query**: "Compare the profit margins of tech giants"
   </Tab>
@@ -119,9 +209,17 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
   <Tab title="Document Content">
     **Use Case**: Accessing filing text and sections
     
-    **Tools**: `get_filing_txt`, `get_filing_txt_sections`, `stream_filing_txt_chunks`
+    **Tools**: `get_filing_content`, `get_filing_sections`, `analyze_8k`
     
     **Example Query**: "Get the business description from Microsoft's latest 10-K"
+  </Tab>
+  
+  <Tab title="Insider Analysis">
+    **Use Case**: Analyzing insider trading and ownership
+    
+    **Tools**: `get_insider_transactions`, `analyze_insider_sentiment`
+    
+    **Example Query**: "Show me recent insider trading activity for Apple executives"
   </Tab>
 </Tabs>
 
@@ -133,25 +231,31 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
   <Card title="Revenue Analysis">
     **Query**: "What was Amazon's revenue growth last quarter?"
     
-    **Tools**: get_cik_by_ticker → get_company_concepts
+    **Tools**: get_cik_by_ticker → get_financials
   </Card>
   
   <Card title="Profitability Comparison">
     **Query**: "Compare the profit margins of Apple and Microsoft"
     
-    **Tools**: get_cik_by_ticker → get_xbrl_frames
+    **Tools**: get_cik_by_ticker → compare_periods
   </Card>
   
   <Card title="Trend Analysis">
     **Query**: "Show me Google's R&D spending trend over 3 years"
     
-    **Tools**: get_cik_by_ticker → get_company_concepts
+    **Tools**: get_cik_by_ticker → get_key_metrics
   </Card>
   
   <Card title="Filing Analysis">
     **Query**: "What are the main risk factors in Tesla's latest 10-K?"
     
-    **Tools**: get_cik_by_ticker → get_submissions → get_filing_txt_sections
+    **Tools**: get_cik_by_ticker → get_recent_filings → get_filing_sections
+  </Card>
+  
+  <Card title="Insider Analysis">
+    **Query**: "Show me recent insider transactions for Apple executives"
+    
+    **Tools**: search_companies → get_insider_transactions → analyze_insider_sentiment
   </Card>
 </CardGroup>
 
@@ -159,19 +263,19 @@ SEC EDGAR MCP provides 7 specialized tools for accessing and analyzing SEC finan
 
 <Steps>
   <Step title="Use Appropriate Tools">
-    Choose the most specific tool for your needs. Use `get_company_concepts` for specific metrics rather than processing full filings.
+    Choose the most specific tool for your needs. Use `get_financials` for financial data rather than processing full filings.
   </Step>
   
   <Step title="Batch Queries">
-    When analyzing multiple companies, use `get_xbrl_frames` for efficient cross-company queries.
+    When analyzing multiple companies, use `compare_periods` for efficient cross-company queries.
   </Step>
   
-  <Step title="Stream Large Files">
-    For large filings (>5MB), use `stream_filing_txt_chunks` to avoid memory issues.
+  <Step title="Process Large Files">
+    For large filings (>5MB), use `get_filing_content` with appropriate sections to avoid memory issues.
   </Step>
   
   <Step title="Cache Results">
-    The tools implement intelligent caching for ticker-to-CIK mappings and frequently accessed data.
+    The tools implement intelligent ticker caching and performance optimization for frequently accessed data.
   </Step>
 </Steps>
 
